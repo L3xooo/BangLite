@@ -1,5 +1,9 @@
 package sk.stuba.fei.uim.oop.cards;
 
+import sk.stuba.fei.uim.oop.Player;
+
+import java.util.List;
+
 public class Card {
     String name;
     String type;
@@ -11,7 +15,9 @@ public class Card {
         this.name = "Undefined";
         this.type = "Undefined";
     }
-
+    public void cardAbility(Player playerOnTurn, List<Card> cardsInStack){
+        System.out.println("This is cardAbility");
+    }
     public String getName() {
         return this.name;
     }

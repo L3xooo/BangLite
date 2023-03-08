@@ -5,4 +5,5 @@ public class Barrel extends Card{
     public Barrel(String name, String type) {
         super(name,type);
     }
+
 }

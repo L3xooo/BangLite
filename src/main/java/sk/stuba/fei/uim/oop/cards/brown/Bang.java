@@ -9,8 +9,4 @@ public class Bang extends Card {
         super(name,type);
         this.damage = 1;
     }
-
-    public void cardAbility(Player targetPlayer){
-        targetPlayer.decreaseHealth();
-    }
 }

@@ -1,24 +1,33 @@
 package sk.stuba.fei.uim.oop;
 
+import sk.stuba.fei.uim.oop.utility.KeyboardInput;
+import sk.stuba.fei.uim.oop.utility.Turn;
+
 public class Assignment1 {
     public static void main(String[] args) {
-        Game game = new Game();
+        int numberOfPlayers;
+        do{
+            numberOfPlayers = KeyboardInput.readInt("Enter number of players");
+        } while (numberOfPlayers < 2 || numberOfPlayers > 4);
+
+        Turn turn = new Turn();
+        Game game = new Game(numberOfPlayers);
         game.initCards();
         game.printPlayers();
+        game.drawCards();
+        //End of game initialization
+        int playerIndex = 0;
+        //Start of one Turn and game
+        while(true) {
+            if (playerIndex >= numberOfPlayers) {
+                playerIndex = 0;
+            }
+            Player playerOnTurn = game.getPlayers().get(playerIndex);
+            turn.playerTurn(playerOnTurn,game.getCardsInStack());
 
-        //game.printCards();
-        game.drawCards(1);
 
-        for(int a = 0; a < 4; a++) {
-            Player player = game.players.get(a);
-            player.printCards();
-            System.out.println();
+
+            playerIndex++;
         }
-
-
-
-
-
-
     }
 }
