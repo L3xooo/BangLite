@@ -16,10 +16,15 @@ public class Indians extends Card {
 
     @Override
     public void cardAbility(Player playerOnTurn, List<Card> cardsInStack) {
-
-
-
         System.out.println("Indians!");
-
+        for(int a = 0; a < playerOnTurn.getEnemyPlayers().size(); a++) {
+            Player targetPlayer = playerOnTurn.getEnemyPlayers().get(a);
+            int cardIndex = targetPlayer.checkCard("Bang",cardsInStack);
+            if(cardIndex == -1 ) {
+                targetPlayer.decreaseHealth(this.getDamage());
+            } else {
+                targetPlayer.removeCard(cardIndex);
+            }
+        }
     }
 }
