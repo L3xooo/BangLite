@@ -13,10 +13,7 @@ public class Barrel extends Card{
     @Override
     public void cardAbility(Player playerOnTurn, List<Card> cardsInStack) {
         System.out.println("Barrel!");
-    }
-
-    @Override
-    public boolean blueCardAbility(Player playerOnTurn, List<Card> cardsInStack) {
-        return this.cardProbabilityOfSuccess(0.25);
+        playerOnTurn.getBlueCards().add(this);
+        playerOnTurn.getPlayerCards().remove(this);
     }
 }

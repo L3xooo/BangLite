@@ -11,17 +11,19 @@ import java.util.*;
 public class Game {
     List<Player> players;
     List<Card> cardsInStack;
-    List<Card> cardsInGame;
     Random rand;
     boolean isWin;
+    String winner;
+
     Game(int numberOfPlayers) {
         this.isWin = false;
         this.players = new ArrayList<Player>();
         for(int a = 0; a < numberOfPlayers; a++) {
-            this.players.add(new Player("Player " + a ));
+            this.players.add(new Player("Player " + a ,a));
         }
         this.cardsInStack = new ArrayList<Card>();
         this.rand = new Random();
+        this.winner = "Undefined";
     }
     public List<Player> getPlayers() {
         return this.players;
@@ -29,9 +31,9 @@ public class Game {
     public List<Card> getCardsInStack() {
         return this.cardsInStack;
     }
-    public List<Card> getCardsInGame() {
-        return this.cardsInGame;
-    }
+    public boolean getIsWin() { return this.isWin; }
+    public String getWinner() { return this.winner; }
+
 
     public void initCards(){
         for(int a = 0; a < 2; a++){
@@ -81,10 +83,10 @@ public class Game {
     public void printPlayers() {
         System.out.println(Arrays.toString(this.players.toArray()));
     }
-
     public void isWin() {
         if (this.players.size() == 1) {
             this.isWin = true;
+            this.winner = this.players.get(0).getName();
         }
     }
 

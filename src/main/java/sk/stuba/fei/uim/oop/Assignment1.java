@@ -10,25 +10,26 @@ public class Assignment1 {
             numberOfPlayers = KeyboardInput.readInt("Enter number of players");
         } while (numberOfPlayers < 2 || numberOfPlayers > 4);
 
-        Turn turn = new Turn();
+
         Game game = new Game(numberOfPlayers);
         game.initPlayerEnemies();
         game.initCards();
-        game.printPlayers();
+        game.printPlayers(); //potom prec
         game.drawCards();
+        Turn turn = new Turn(game.getPlayers().get(0));
         //End of game initialization
-        int playerIndex = 0;
+
         //Start of one Turn and game
+        Player playerOnTurn = game.getPlayers().get(0);
         while(true) {
-            if (playerIndex >= numberOfPlayers) {
-                playerIndex = 0;
+            if (game.getIsWin()) {
+                System.out.println("Winner is " + game.getWinner());
+                break;
             }
-            Player playerOnTurn = game.getPlayers().get(playerIndex);
-            turn.playerTurn(playerOnTurn,game.getCardsInStack());
+            turn.playerTurn(game.getCardsInStack(),game.getPlayers());
 
 
 
-            playerIndex++;
         }
     }
 }

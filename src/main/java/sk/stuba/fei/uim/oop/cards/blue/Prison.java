@@ -19,8 +19,12 @@ public class Prison extends Card{
     }
 
     @Override
-    public boolean blueCardAbility(Player playerOnTurn, List<Card> cardsInStack) {
+    public void blueCardAbility(Player playerOnTurn, List<Card> cardsInStack,List<Player> players) {
         boolean result = this.cardProbabilityOfSuccess(0.25);
-        return result;
+        if (result) {
+            playerOnTurn.getBlueCards().remove(this);
+        } else {
+
+        }
     }
 }

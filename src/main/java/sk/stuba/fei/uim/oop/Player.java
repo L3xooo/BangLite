@@ -6,24 +6,29 @@ import sk.stuba.fei.uim.oop.cards.brown.Bang;
 import sk.stuba.fei.uim.oop.utility.KeyboardInput;
 public class Player {
     String name;
+    int index;
     int health;
     List<Card> playerCards;
     List<Card> blueCards;
     List <Player> enemyPlayers;
-    public Player(String name){
+
+    //Constructor Start
+    public Player(String name,int index){
         this.name = name;
         this.health = 4;
         this.playerCards = new ArrayList<>();
         this.blueCards = new ArrayList<>();
         this.enemyPlayers = new ArrayList<>();
+        this.index = index;
     }
-
+    //Constructor End
 
     //Getters Start
     public String getName() { return this.name; }
     public int getHealth() {
         return this.health;
     }
+    public int getIndex() { return this.index; }
     public List<Card> getPlayerCards() { return this.playerCards; }
     public List<Player> getEnemyPlayers() { return this.enemyPlayers; }
     public List<Card> getBlueCards() { return this.blueCards; }
@@ -33,13 +38,7 @@ public class Player {
     }
     //Getters End
 
-
-    public void decreaseHealth(int damage) {
-        this.health -= damage;
-    }
-    public void addHealth(int healAmount) {
-        this.health += healAmount;
-    }
+    //GameInitialization Staty
     public void addEnemies(List<Player> players) {
         for(int a = 0; a < players.size(); a++) {
             if(this.getName().equals(players.get(a).getName())){
@@ -49,12 +48,15 @@ public class Player {
             }
         }
     }
-    public void printCards() {
-        for (int a = 0; a < this.playerCards.size(); a++) {
-            System.out.printf("%s ",this.playerCards.get(a).getName());
-        }
-        System.out.println();
-    } //funguje v pohode
+    //GameInitialization End
+
+    public void decreaseHealth(int damage) {
+        this.health -= damage;
+    }
+    public void addHealth(int healAmount) {
+        this.health += healAmount;
+    }
+
     public void drawCard(int numberOfCards,List<Card> cardsInStack) {
         for(int a = 0; a < numberOfCards; a++) {
             this.playerCards.add(cardsInStack.get(0));
@@ -82,17 +84,31 @@ public class Player {
     public void removeCard(int index) {
         this.getPlayerCards().remove(index);
     }
-    public void removeBlueCard(int index) {
-        this.getBlueCards().remove(index);
-    }
     public void cardChoose(List<Card> cardDeck) {
-        this.printCards();
-        int index = KeyboardInput.readInt("Enter card index");
-        Card card = this.playerCards.get(index);
-        card.cardAbility(this,cardDeck);
-        this.playerCards.remove(card);
-        cardDeck.add(card);
+        while(true) {
+            try{
+                int input = KeyboardInput.readInt("Enter card index");
+                if (input < 0 || input >= this.getPlayerCards().size()) {
+                    throw new IndexOutOfBoundsException();
+                }
+                Card card = this.playerCards.get(index);
+                card.cardAbility(this,cardDeck);
+                this.playerCards.remove(card);
+                cardDeck.add(card);
+                break;
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Index ot ouf bounds. Please enter correct index!");
+            }
+        }
     }
+
+    public void checkBlueCards() {
+        for (int a = 0; a < this.getBlueCards().size(); a++) {
+
+        }
+    }
+
+    //PrintMethods Start
     public void printEnemyPlayers() {
         for (int a = 0; a < this.getEnemyPlayers().size(); a++) {
             Player player = this.enemyPlayers.get(a);
@@ -108,10 +124,15 @@ public class Player {
         System.out.println();
     }
     public void printPlayerStats() {
-        System.out.printf("Player: %s   Health: %d",this.getName(),this.getHealth());
+        System.out.printf("Player: %s   Health: %d \n",this.getName(),this.getHealth());
     }
-
-
+    public void printCards() {
+        for (int a = 0; a < this.playerCards.size(); a++) {
+            System.out.printf("(%d) - %s ",a,this.playerCards.get(a).getName());
+        }
+        System.out.println();
+    } //funguje v pohode
+    //PrintMethods End
 
 }
 

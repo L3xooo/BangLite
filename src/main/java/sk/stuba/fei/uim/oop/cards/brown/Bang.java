@@ -30,8 +30,9 @@ public class Bang extends Card {
                 int cardIndex = targetPlayer.checkCard("Barrel",targetPlayer.getBlueCards());
                 if(cardIndex != - 1) {
                     Card card = targetPlayer.getBlueCards().get(cardIndex);
-                    boolean result = card.blueCardAbility(targetPlayer,cardsInStack);
+                    boolean result = card.cardProbabilityOfSuccess(0.25);
                     if (result) {   //Barrel zabral
+                        System.out.println("Missed");
                         return;
                     }
                 }
@@ -39,6 +40,7 @@ public class Bang extends Card {
                 if(cardIndex == -1) {
                     targetPlayer.decreaseHealth(this.getDamage());
                 } else {
+                    System.out.println("Missed");
                     targetPlayer.removeCard(cardIndex);
                 }
                 break;

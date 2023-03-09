@@ -34,8 +34,7 @@ public class Card {
         }
     }
 
-    public boolean blueCardAbility(Player playerOnTurn, List<Card> cardsInStack) {
+    public void blueCardAbility(Player playerOnTurn, List<Card> cardsInStack, List<Player> players) {
         System.out.println("blueCardAbility");
-        return false;
     }
 }
