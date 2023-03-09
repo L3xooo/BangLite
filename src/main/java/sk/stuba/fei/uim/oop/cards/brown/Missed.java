@@ -14,6 +14,5 @@ public class Missed extends Card {
     @Override
     public void cardAbility(Player playerOnTurn, List<Card> cardsInStack) {
         System.out.println("Missed!");
-
     }
 }
