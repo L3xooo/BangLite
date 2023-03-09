@@ -9,27 +9,40 @@ public class Player {
     int health;
     List<Card> playerCards;
     List<Card> blueCards;
-
+    List <Player> enemyPlayers;
     public Player(String name){
         this.name = name;
         this.health = 4;
-        this.playerCards = new ArrayList<Card>();
-        this.blueCards = new ArrayList<Card>();
+        this.playerCards = new ArrayList<>();
+        this.blueCards = new ArrayList<>();
+        this.enemyPlayers = new ArrayList<>();
     }
 
     public String getName() { return this.name; }
     public int getHealth() {
         return this.health;
     }
+
+    public List<Player> getEnemyPlayers() { return this.enemyPlayers; }
     public void decreaseHealth(int damage) {
         this.health -= damage;
     }
-    public void addHealth() {
-        this.health += 1;
+    public void addHealth(int healAmount) {
+        this.health += healAmount;
     }
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public void addEnemies(List<Player> players) {
+        for(int a = 0; a < players.size(); a++) {
+            if(this.getName().equals(players.get(a).getName())){
+                continue;
+            } else {
+                this.enemyPlayers.add(players.get(a));
+            }
+        }
     }
 
     public void printCards() {
@@ -37,12 +50,11 @@ public class Player {
             System.out.printf(" %s ",this.playerCards.get(a).getName());
         }
         System.out.println();
-    }
+    } //funguje v pohode
 
     public void drawCard(int numberOfCards,List<Card> cardsInStack) {
         for(int a = 0; a < numberOfCards; a++) {
             this.playerCards.add(cardsInStack.get(0));
-            //cardsInGame.add(cardsInStack.get(0));
             cardsInStack.remove(0);
         }
     }
@@ -56,24 +68,39 @@ public class Player {
             cardStack.add(removedCard);
             this.playerCards.remove(index);
         }
-    }
+    } //funguje v poriadku
 
-    public boolean checkCard(String cardName,List<Card> cardDeck){
+    public int checkCard(String cardName,List<Card> cardDeck){
         for(int a = 0; a < this.playerCards.size(); a++){
             if(this.playerCards.get(a).getName().equals(cardName)) {
-                cardDeck.add(this.playerCards.get(a));
-                this.playerCards.remove(this.playerCards.get(a));
-                return true;
+                return a;
             }
         }
-        return false;
+        return -1;
     }
 
+    public void removeCard(int index) {
+        this.playerCards.remove(index);
+    }
     public void cardChoose(List<Card> cardDeck) {
         this.printCards();
         int index = KeyboardInput.readInt("Enter card index");
         Card card = this.playerCards.get(index);
+        card.cardAbility(this,cardDeck);
+        this.playerCards.remove(card);
+        cardDeck.add(card);
+    }
 
+    public void printEnemyPlayers() {
+        for (int a = 0; a < this.getEnemyPlayers().size(); a++) {
+            System.out.printf("(%d) - %s    Health: %d",a,this.getEnemyPlayers().get(a).getName(),
+                    this.getEnemyPlayers().get(a).getHealth());
+        }
+        System.out.println();
+    }
+
+    public void printPlayerStats() {
+        System.out.printf("Player: %s   Health: %d",this.getName(),this.getHealth());
     }
 }
 

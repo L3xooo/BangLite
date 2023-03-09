@@ -10,8 +10,8 @@ public class Stagecoach extends Card {
     }
 
     @Override
-    public void cardAbility(Player targetPlayer, List<Card> cardsInStack){
+    public void cardAbility(Player playerOnTurn, List<Card> cardsInStack){
         System.out.println("Stagecouch");
-        targetPlayer.drawCard(2,cardsInStack);
+        playerOnTurn.drawCard(2,cardsInStack);
     }
 }

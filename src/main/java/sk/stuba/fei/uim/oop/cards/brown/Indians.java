@@ -14,4 +14,12 @@ public class Indians extends Card {
         this.damage = 1;
     }
 
+    @Override
+    public void cardAbility(Player playerOnTurn, List<Card> cardsInStack) {
+
+
+
+        System.out.println("Indians!");
+
+    }
 }

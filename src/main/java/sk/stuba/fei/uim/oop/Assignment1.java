@@ -12,6 +12,7 @@ public class Assignment1 {
 
         Turn turn = new Turn();
         Game game = new Game(numberOfPlayers);
+        game.initPlayerEnemies();
         game.initCards();
         game.printPlayers();
         game.drawCards();

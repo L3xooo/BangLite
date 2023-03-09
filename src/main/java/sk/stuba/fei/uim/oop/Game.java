@@ -61,6 +61,12 @@ public class Game {
         }
         Collections.shuffle(this.cardsInStack);
     }
+    public void initPlayerEnemies() {
+        for(int a = 0; a < this.getPlayers().size(); a++) {
+            getPlayers().get(a).addEnemies(this.getPlayers());
+            System.out.println(Arrays.toString(getPlayers().get(a).enemyPlayers.toArray()));
+        }
+    }
     public void drawCards(){
         int numberOfPlayers = this.players.size();
         for(int a = 0; a < numberOfPlayers; a++) {
@@ -75,6 +81,7 @@ public class Game {
     public void printPlayers() {
         System.out.println(Arrays.toString(this.players.toArray()));
     }
+
     public void isWin() {
         if (this.players.size() == 1) {
             this.isWin = true;

@@ -7,10 +7,16 @@ import java.util.List;
 
 public class Turn {
     public void playerTurn(Player playerOnTurn, List<Card> cardDeck){
-        System.out.printf("%s is on turn.",playerOnTurn.getName() );
+        playerOnTurn.printPlayerStats();
         playerOnTurn.drawCard(2,cardDeck);
         playerOnTurn.cardChoose(cardDeck);
 
 
+
+
+
+
+
+        playerOnTurn.checkCardCount(cardDeck);
     }
 }
