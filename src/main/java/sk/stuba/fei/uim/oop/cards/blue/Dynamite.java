@@ -23,7 +23,7 @@ public class Dynamite extends Card {
 
 
     @Override
-    public void blueCardAbility(Player playerOnTurn, List<Card> cardsInStack,List<Player> players) {
+    public int blueCardAbility(Player playerOnTurn, List<Card> cardsInStack,List<Player> players) {
         boolean result = this.cardProbabilityOfSuccess(0.125);
         if (result) {
             int activeIndex = players.indexOf(playerOnTurn);
@@ -37,7 +37,9 @@ public class Dynamite extends Card {
         } else {
             playerOnTurn.decreaseHealth(this.getDamage());
             cardsInStack.add(this);
+            playerOnTurn.checkDeath();
         }
         playerOnTurn.getBlueCards().remove(this);
+        return -1;
     }
 }

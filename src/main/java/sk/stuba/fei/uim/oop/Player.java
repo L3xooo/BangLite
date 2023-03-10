@@ -2,24 +2,28 @@ package sk.stuba.fei.uim.oop;
 import java.util.ArrayList;
 import java.util.List;
 import sk.stuba.fei.uim.oop.cards.Card;
+import sk.stuba.fei.uim.oop.cards.blue.Dynamite;
+import sk.stuba.fei.uim.oop.cards.blue.Prison;
 import sk.stuba.fei.uim.oop.cards.brown.Bang;
 import sk.stuba.fei.uim.oop.utility.KeyboardInput;
+import sk.stuba.fei.uim.oop.utility.Turn;
+
 public class Player {
     String name;
-    int index;
     int health;
+    boolean death;
     List<Card> playerCards;
     List<Card> blueCards;
     List <Player> enemyPlayers;
 
     //Constructor Start
     public Player(String name,int index){
+        this.death = false;
         this.name = name;
         this.health = 4;
         this.playerCards = new ArrayList<>();
         this.blueCards = new ArrayList<>();
         this.enemyPlayers = new ArrayList<>();
-        this.index = index;
     }
     //Constructor End
 
@@ -28,7 +32,7 @@ public class Player {
     public int getHealth() {
         return this.health;
     }
-    public int getIndex() { return this.index; }
+    public boolean getDeath() { return this.death; }
     public List<Card> getPlayerCards() { return this.playerCards; }
     public List<Player> getEnemyPlayers() { return this.enemyPlayers; }
     public List<Card> getBlueCards() { return this.blueCards; }
@@ -50,13 +54,17 @@ public class Player {
     }
     //GameInitialization End
 
+    public void checkDeath() {
+        if (this.getHealth() <= 0) {
+            this.death = true;
+        }
+    }
     public void decreaseHealth(int damage) {
         this.health -= damage;
     }
     public void addHealth(int healAmount) {
         this.health += healAmount;
     }
-
     public void drawCard(int numberOfCards,List<Card> cardsInStack) {
         for(int a = 0; a < numberOfCards; a++) {
             this.playerCards.add(cardsInStack.get(0));
@@ -91,7 +99,7 @@ public class Player {
                 if (input < 0 || input >= this.getPlayerCards().size()) {
                     throw new IndexOutOfBoundsException();
                 }
-                Card card = this.playerCards.get(index);
+                Card card = this.playerCards.get(input);
                 card.cardAbility(this,cardDeck);
                 this.playerCards.remove(card);
                 cardDeck.add(card);
@@ -102,9 +110,34 @@ public class Player {
         }
     }
 
-    public void checkBlueCards() {
-        for (int a = 0; a < this.getBlueCards().size(); a++) {
+    public void playerDied(List<Card> cardDeck, List<Player> players, Turn turn) {
+        int activeIndex = players.indexOf(this);
+        int newIndex = activeIndex+1;
+        if (newIndex > players.size()-1) {
+            newIndex = 0;
+        }
+        cardDeck.addAll(this.getPlayerCards());
+        cardDeck.addAll(this.getBlueCards());
+        this.getBlueCards().clear();
+        this.getPlayerCards().clear();
+        for(int a = 0; a < this.getEnemyPlayers().size(); a++) {
+            this.getEnemyPlayers().get(a).getEnemyPlayers().remove(this);
+        }
+        this.getEnemyPlayers().clear();
+        players.remove(this);
+        System.out.println(players.toString());
+        turn.setPlayerOnTurn(players.get(newIndex));
 
+    }
+
+
+
+    public void checkBlueCards(List<Card> cardDeck, List<Player> players,String cardName) {
+        for (int a = 0; a < this.getBlueCards().size(); a++) {
+            if (this.getBlueCards().get(a).getName().equals(cardName)) {
+                Card card = this.getBlueCards().get(a);
+                int result = card.blueCardAbility(this,cardDeck,players);
+            }
         }
     }
 
@@ -131,7 +164,7 @@ public class Player {
             System.out.printf("(%d) - %s ",a,this.playerCards.get(a).getName());
         }
         System.out.println();
-    } //funguje v pohode
+    }
     //PrintMethods End
 
 }

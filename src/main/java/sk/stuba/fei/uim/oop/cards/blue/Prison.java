@@ -13,18 +13,35 @@ public class Prison extends Card{
     @Override
     public void cardAbility(Player playerOnTurn, List<Card> cardsInStack) {
         playerOnTurn.printEnemyPlayers();
-        int index = KeyboardInput.readInt("Enter player index");
-        Player targetPlayer = playerOnTurn.getEnemyPlayers().get(index);
-        targetPlayer.getBlueCards().add(this);
+        while(true) {
+            try{
+                int index = KeyboardInput.readInt("Enter player index");
+                if (index < 0 || index >= playerOnTurn.getEnemyPlayers().size()) {
+                    throw new IndexOutOfBoundsException();
+                }
+                Player targetPlayer = playerOnTurn.getEnemyPlayers().get(index);
+                targetPlayer.getBlueCards().add(this);
+                break;
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Index out of bounds. Please enter correct index!");
+            }
+        }
     }
 
     @Override
-    public void blueCardAbility(Player playerOnTurn, List<Card> cardsInStack,List<Player> players) {
+    public int blueCardAbility(Player playerOnTurn, List<Card> cardsInStack,List<Player> players) {
         boolean result = this.cardProbabilityOfSuccess(0.25);
-        if (result) {
-            playerOnTurn.getBlueCards().remove(this);
-        } else {
-
+        if (!result) { //neusiel
+            //neusiel ide dalsi hrac
+            int activeIndex = players.indexOf(playerOnTurn);
+            int newIndex = activeIndex+1;
+            if (newIndex > players.size()-1) {
+                newIndex = 0;
+            }
+            return newIndex;
         }
+        cardsInStack.add(this);
+        playerOnTurn.getBlueCards().remove(this);
+        return -1;
     }
 }

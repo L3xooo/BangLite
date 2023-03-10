@@ -11,14 +11,35 @@ public class Turn {
     public Turn(Player player) {
         this.playerOnTurn = player;
     }
-
     public Player getPlayerOnTurn() { return this.playerOnTurn; }
     public void setPlayerOnTurn(Player player) { this.playerOnTurn = player; }
 
     public void playerTurn(List<Card> cardDeck,List<Player> players){
+        this.getPlayerOnTurn().checkDeath();    //toot tu asi nebude treba to spravit pri bang a to indiani
+        if (this.getPlayerOnTurn().getDeath()) { //pokial niekoho vyhodnoti ze je dead
+            this.getPlayerOnTurn().playerDied(cardDeck,players,this); // hrac skapal
+            return;
+        }
+
+
         System.out.println();
         this.getPlayerOnTurn().printPlayerStats();
-        this.getPlayerOnTurn().checkBlueCards();
+        this.getPlayerOnTurn().checkBlueCards(cardDeck,players,"Dynamite");
+
+        if (this.getPlayerOnTurn().getDeath()) {
+            this.getPlayerOnTurn().playerDied(cardDeck,players,this); // hrac skapal
+            return;
+        }
+
+
+        this.getPlayerOnTurn().checkBlueCards(cardDeck,players,"Prison");
+
+
+
+
+
+
+
         System.out.printf("%s drawing 2 cards!\n",this.getPlayerOnTurn().getName());
         this.getPlayerOnTurn().drawCard(2,cardDeck);
         while (true) {
@@ -45,9 +66,6 @@ public class Turn {
             } catch (IllegalArgumentException e) {
                 System.out.println("You entered wrong argument. Please try again!");
             }
-
-
-
             //playerOnTurn.cardChoose(cardDeck);
 
         }

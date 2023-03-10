@@ -34,7 +34,8 @@ public class Card {
         }
     }
 
-    public void blueCardAbility(Player playerOnTurn, List<Card> cardsInStack, List<Player> players) {
+    public int blueCardAbility(Player playerOnTurn, List<Card> cardsInStack, List<Player> players) {
         System.out.println("blueCardAbility");
+        return 0;
     }
 }

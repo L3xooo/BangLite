@@ -22,6 +22,7 @@ public class Assignment1 {
         //Start of one Turn and game
         Player playerOnTurn = game.getPlayers().get(0);
         while(true) {
+            game.isWin();
             if (game.getIsWin()) {
                 System.out.println("Winner is " + game.getWinner());
                 break;
