@@ -5,13 +5,27 @@ import sk.stuba.fei.uim.oop.cards.Card;
 import java.util.List;
 
 public class Stagecoach extends Card {
+    //Constructors Start
     public Stagecoach(String name,String type){
         super(name,type);
     }
+    //Constructors End
 
+    //Methods Start
     @Override
-    public void cardAbility(Player playerOnTurn, List<Card> cardsInStack){
-        System.out.println("Stagecouch");
-        playerOnTurn.drawCard(2,cardsInStack);
+    public void cardAbility(Player playerOnTurn, List<Card> cardDeck,List<Player> players){
+        System.out.println(playerOnTurn.getName() + " used Stagecoach and draw 2 cards!");
+        if (cardDeck.size() < 2) {
+            System.out.println("There are no cards left in deck.");
+        } else {
+            playerOnTurn.drawCard(2,cardDeck);
+            playerOnTurn.getPlayerCards().remove(this);
+            cardDeck.add(this);
+        }
     }
+    @Override
+    public void blueCardAbility(Player playerOnTurn, List<Card> cardDeck, List<Player> players) {
+
+    }
+    //Methods End
 }

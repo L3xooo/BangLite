@@ -8,23 +8,39 @@ import java.util.List;
 public class Indians extends Card {
     int damage;
 
-    public int getDamage() { return this.damage; }
+    //Constructors Start
     public Indians(String name,String type) {
         super(name,type);
         this.damage = 1;
     }
+    //Constructors End
 
+    //Getters Start
+    public int getDamage() { return this.damage; }
+    //Getters End
+
+    //Methods Start
     @Override
-    public void cardAbility(Player playerOnTurn, List<Card> cardsInStack) {
-        System.out.println("Indians!");
+    public void cardAbility(Player playerOnTurn, List<Card> cardDeck,List<Player> players) {
         for(int a = 0; a < playerOnTurn.getEnemyPlayers().size(); a++) {
             Player targetPlayer = playerOnTurn.getEnemyPlayers().get(a);
-            int cardIndex = targetPlayer.checkCard("Bang",cardsInStack);
+            int cardIndex = targetPlayer.checkCard(targetPlayer.getPlayerCards(),Indians.class);
             if(cardIndex == -1 ) {
+                System.out.println(targetPlayer.getName() + " received damage from Indians!");
                 targetPlayer.decreaseHealth(this.getDamage());
+                targetPlayer.checkDeath();
+                if (targetPlayer.getDeath()) {
+                    targetPlayer.playerDied(cardDeck,players);
+                }
             } else {
+                System.out.println(targetPlayer.getName() + " used Bang and killed the Indians!");
                 targetPlayer.removeCard(cardIndex);
             }
         }
+        playerOnTurn.getPlayerCards().remove(this);
+        cardDeck.add(this);
     }
+    @Override
+    public void blueCardAbility(Player playerOnTurn, List<Card> cardDeck, List<Player> players) {}
+    //Methods End
 }

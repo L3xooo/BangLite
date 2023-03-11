@@ -5,10 +5,12 @@ import sk.stuba.fei.uim.oop.Player;
 import java.util.List;
 import java.util.Random;
 
-public class Card {
+public abstract class Card {
     String name;
     String type;
     Random rand;
+
+    //Constructor Start
     public Card(String name, String type) {
         this.name = name;
         this.type = type;
@@ -19,23 +21,20 @@ public class Card {
         this.type = "Undefined";
         this.rand = new Random();
     }
+    //Constructor End
+
+    //Getters Start
     public String getName() {
         return this.name;
     }
     public Random getRand() { return this.rand; }
-    public void cardAbility(Player playerOnTurn, List<Card> cardsInStack){
-        System.out.println("This is cardAbility");
-    }
-    public boolean cardProbabilityOfSuccess(double probability) {
-        if(Math.random() < probability) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    //Getters End
 
-    public int blueCardAbility(Player playerOnTurn, List<Card> cardsInStack, List<Player> players) {
-        System.out.println("blueCardAbility");
-        return 0;
+    //Methods Start
+    public abstract void cardAbility(Player playerOnTurn, List<Card> cardDeck, List<Player> players);
+    public boolean cardProbabilityOfSuccess(double probability) {
+        return Math.random() < probability;
     }
+    public abstract void blueCardAbility(Player playerOnTurn, List<Card> cardDeck, List<Player> players);
+    //Methods End
 }
