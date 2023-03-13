@@ -8,9 +8,11 @@ import java.util.List;
 
 public class CatBalou extends Card {
 
+    private static final String CARD_NAME = "CatBalou";
+
     //Constructors Start
-    public CatBalou(String name, String type) {
-        super(name,type);
+    public CatBalou() {
+        super(CARD_NAME);
     }
     //Constructors End
 

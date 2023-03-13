@@ -6,16 +6,16 @@ import sk.stuba.fei.uim.oop.cards.Card;
 import java.util.List;
 
 public class Beer extends Card {
-    int healAmount;
+    private static final String CARD_NAME = "Beer";
+    private static final int HEAL_AMOUNT = 1;
     //Constructors Start
-    public Beer(String name, String type) {
-        super(name,type);
-        this.healAmount = 1;
+    public Beer() {
+        super(CARD_NAME);
     }
     //Constructors End
 
     //Getters Start
-    public int getHealAmount() { return this.healAmount; }
+    public int getHealAmount() { return HEAL_AMOUNT; }
     //Getters End
 
     //Methods Start

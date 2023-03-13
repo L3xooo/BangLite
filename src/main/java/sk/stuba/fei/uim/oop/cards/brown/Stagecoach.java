@@ -5,9 +5,11 @@ import sk.stuba.fei.uim.oop.cards.Card;
 import java.util.List;
 
 public class Stagecoach extends Card {
+    private static final String CARD_NAME = "Stagecoach";
+
     //Constructors Start
-    public Stagecoach(String name,String type){
-        super(name,type);
+    public Stagecoach(){
+        super(CARD_NAME);
     }
     //Constructors End
 

@@ -7,8 +7,10 @@ import java.util.List;
 
 public class Prison extends Card{
     //Constructors Start
-    public Prison(String name,String type) {
-        super(name,type);
+    private static final String CARD_NAME = "Prison";
+
+    public Prison() {
+        super(CARD_NAME);
     }
     //Constructors End
 

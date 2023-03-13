@@ -6,17 +6,18 @@ import sk.stuba.fei.uim.oop.cards.Card;
 import java.util.List;
 
 public class Indians extends Card {
-    int damage;
+    private static final String CARD_NAME = "Indians";
+
+    private static final int DAMAGE = 1;
 
     //Constructors Start
-    public Indians(String name,String type) {
-        super(name,type);
-        this.damage = 1;
+    public Indians() {
+        super(CARD_NAME);
     }
     //Constructors End
 
     //Getters Start
-    public int getDamage() { return this.damage; }
+    public int getDamage() { return DAMAGE; }
     //Getters End
 
     //Methods Start

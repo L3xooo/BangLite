@@ -8,17 +8,17 @@ import sk.stuba.fei.uim.oop.utility.KeyboardInput;
 import java.util.List;
 
 public class Bang extends Card {
-    int damage;
+    private static final String CARD_NAME = "Bang";
+    private static final int DAMAGE = 1;
 
     //Constructors Start
-    public Bang(String name, String type) {
-        super(name,type);
-        this.damage = 1;
+    public Bang() {
+        super(CARD_NAME);
     }
     //Constructors End
 
     //Getters Start
-    public int getDamage() { return this.damage; }
+    public int getDamage() { return DAMAGE; }
     //Getters End
 
     //Methods Start

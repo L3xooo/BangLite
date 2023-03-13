@@ -7,18 +7,11 @@ import java.util.Random;
 
 public abstract class Card {
     String name;
-    String type;
     Random rand;
 
     //Constructor Start
-    public Card(String name, String type) {
+    public Card(String name) {
         this.name = name;
-        this.type = type;
-        this.rand = new Random();
-    }
-    public Card(){
-        this.name = "Undefined";
-        this.type = "Undefined";
         this.rand = new Random();
     }
     //Constructor End

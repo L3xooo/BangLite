@@ -5,9 +5,10 @@ import sk.stuba.fei.uim.oop.cards.Card;
 import java.util.List;
 
 public class Barrel extends Card{
+    private static final String CARD_NAME = "Barrel";
     //Constructor Start
-    public Barrel(String name, String type) {
-        super(name,type);
+    public Barrel() {
+        super(CARD_NAME);
     }
     //Constructor End
 

@@ -6,18 +6,17 @@ import sk.stuba.fei.uim.oop.cards.Card;
 import java.util.List;
 
 public class Dynamite extends Card {
-    int damage;
+    private static final String CARD_NAME = "Dynamite";
+    private static final int DAMAGE = 1;
 
     //Constructor Start
-    public Dynamite(String name,String type) {
-
-        super(name,type);
-        this.damage = 3;
+    public Dynamite() {
+        super(CARD_NAME);
     }
     //Constructor End
 
     //Getters Start
-    public int getDamage() { return this.damage; }
+    public int getDamage() { return DAMAGE; }
     //Getters End
 
     //Methods Start

@@ -49,9 +49,7 @@ public class Player {
     //GameInitialization Start
     public void addEnemies(List<Player> players) {
         for (Player player : players) {
-            if (this.getName().equals(player.getName())) {
-                continue;
-            } else {
+            if (!this.getName().equals(player.getName())) {
                 this.getEnemyPlayers().add(player);
             }
         }
@@ -139,8 +137,9 @@ public class Player {
         players.remove(this);
     }
     public boolean checkBlueCards(List<Card> cardDeck, List<Player> players, Turn turn) {
-        int prisonIndex = this.getBlueCards().indexOf(new Prison("Prison","blue"));
-        int dynamiteIndex = this.getBlueCards().indexOf(new Dynamite("Dynamite","blue"));
+
+        int prisonIndex = this.checkCard(this.getBlueCards(),Prison.class);
+        int dynamiteIndex = this.checkCard(this.getBlueCards(),Dynamite.class);
         if (prisonIndex != -1 && dynamiteIndex !=-1) {
             if (prisonIndex < dynamiteIndex) {
                 Collections.swap(this.getBlueCards(),prisonIndex,dynamiteIndex);

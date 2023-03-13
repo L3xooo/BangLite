@@ -6,9 +6,11 @@ import sk.stuba.fei.uim.oop.cards.Card;
 import java.util.List;
 
 public class Missed extends Card {
+    private static final String CARD_NAME = "Missed";
+
     //Constructors Start
-    public Missed(String name,String type){
-        super(name,type);
+    public Missed(){
+        super(CARD_NAME);
     }
     //Constructors End
 
