@@ -1,12 +1,13 @@
-package sk.stuba.fei.uim.oop;
+package sk.stuba.fei.uim.oop.game;
 
+import sk.stuba.fei.uim.oop.player.Player;
+import sk.stuba.fei.uim.oop.turn.Turn;
 import sk.stuba.fei.uim.oop.cards.Card;
 import sk.stuba.fei.uim.oop.cards.blue.Barrel;
 import sk.stuba.fei.uim.oop.cards.blue.Dynamite;
 import sk.stuba.fei.uim.oop.cards.blue.Prison;
 import sk.stuba.fei.uim.oop.cards.brown.*;
 import sk.stuba.fei.uim.oop.utility.KeyboardInput;
-import sk.stuba.fei.uim.oop.utility.Turn;
 
 import java.util.*;
 
@@ -17,7 +18,7 @@ public class Game {
     private Player winner;
 
     //Constructors Start
-    Game() {
+    public Game() {
         System.out.println("--- Welcome to game BANG ---");
         int numberOfPlayers;
         do{
@@ -27,13 +28,26 @@ public class Game {
             }
         } while (numberOfPlayers < 2 || numberOfPlayers > 4);
 
-
         this.isWin = false;
         this.players = new ArrayList<>();
-        for(int a = 0; a < numberOfPlayers; a++) {
+        int a = 0;
+        do {
             String playerName = KeyboardInput.readString("Enter name for Player " + (a+1));
-            this.players.add(new Player(playerName));
-        }
+            boolean contain = false;
+            for (Player player : this.players) {
+                if (player.getName().equals(playerName)) {
+                    contain = true;
+                    System.out.println("Player name is already taken, choose another name!");
+                    break;
+                }
+            }
+            if (!contain) {
+                this.players.add(new Player(playerName));
+                a++;
+            }
+        } while (a < numberOfPlayers);
+
+        System.out.println();
         this.cardDeck = new ArrayList<>();
         this.winner = null;
 
@@ -65,27 +79,27 @@ public class Game {
         for(int a = 0; a < 2; a++){
             this.cardDeck.add(new Barrel());
         }
-        this.cardDeck.add(new Dynamite());
+        this.cardDeck.add(new Dynamite(this.players,this.cardDeck));
         for(int a = 0; a < 3; a++){
-            this.cardDeck.add(new Prison());
+            this.cardDeck.add(new Prison(this.cardDeck));
         }
-        for(int a = 0; a < 30; a++){
-            this.cardDeck.add(new Bang());
+        for(int a = 0; a < 30; a++){ //30
+            this.cardDeck.add(new Bang(this.cardDeck,this.players));
         }
-        for(int a = 0; a < 15; a++){
+        for(int a = 0; a < 15; a++){ //15
             this.cardDeck.add(new Missed());
         }
         for(int a = 0; a < 8; a++){
             this.cardDeck.add(new Beer());
         }
         for(int a = 0; a < 6; a++){
-            this.cardDeck.add(new CatBalou());
+            this.cardDeck.add(new CatBalou(this.cardDeck));
         }
         for(int a = 0; a < 2; a++){
-            this.cardDeck.add(new Indians());
+            this.cardDeck.add(new Indians(this.cardDeck,this.players));
         }
         for(int a = 0; a < 4; a++){
-            this.cardDeck.add(new Stagecoach());
+            this.cardDeck.add(new Stagecoach(this.cardDeck));
         }
         Collections.shuffle(this.cardDeck);
     }
@@ -97,14 +111,28 @@ public class Game {
         //GameInitialization End
 
     public void startGame(){
-        Turn turn = new Turn(this.getPlayers().get(0));
+        System.out.print("--- GAME START ---");
+        Turn turn = new Turn();
+        Iterator<Player> it = this.getPlayers().iterator();
+        Player next;
         while(true) {
+            if (!it.hasNext()) {
+                it = this.getPlayers().iterator();
+            }
+            next = it.next();
+            if (next.getDeath()) {
+                continue;
+            }
+
+            turn.setPlayerOnTurn(next);
+
             this.isWin();
             if (this.getIsWin()) {
-                System.out.println("Winner is " + this.getWinner());
+                System.out.println("\n\n\n\n\n--- WINNER IS PLAYER: " + this.getWinner() + " ---");
                 break;
             }
             turn.playerTurn(this.getCardDeck(),this.getPlayers());
+
         }
     }
 

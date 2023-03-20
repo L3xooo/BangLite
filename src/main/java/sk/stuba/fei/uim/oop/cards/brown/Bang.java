@@ -1,69 +1,69 @@
 package sk.stuba.fei.uim.oop.cards.brown;
 
-import sk.stuba.fei.uim.oop.Player;
+import sk.stuba.fei.uim.oop.player.Player;
 import sk.stuba.fei.uim.oop.cards.Card;
 import sk.stuba.fei.uim.oop.cards.blue.Barrel;
-import sk.stuba.fei.uim.oop.utility.KeyboardInput;
 
 import java.util.List;
 
 public class Bang extends Card {
     private static final String CARD_NAME = "Bang";
+    private static final String CARD_TYPE = "Brown";
     private static final int DAMAGE = 1;
+    private List<Card> cardDeck;
+    private List<Player> players;
 
     //Constructors Start
-    public Bang() {
-        super(CARD_NAME);
+    public Bang(List<Card> cardDeck, List<Player> players) {
+        super(CARD_NAME,CARD_TYPE);
+        this.cardDeck = cardDeck;
+        this.players = players;
     }
     //Constructors End
 
     //Getters Start
     public int getDamage() { return DAMAGE; }
+    public List<Card> getCardDeck() {
+        return this.cardDeck;
+    }
+    public List<Player> getPlayers() {
+        return this.players;
+    }
     //Getters End
 
     //Methods Start
     @Override
-    public void cardAbility(Player playerOnTurn, List<Card> cardDeck,List<Player> players) { //pridat barrel
-        System.out.println("Bang!");
-        playerOnTurn.printEnemyPlayers();
-        while(true) {
-            int index = KeyboardInput.readInt("Enter target player index");
-            if (index < 0 || index >= playerOnTurn.getEnemyPlayers().size()) {
-                System.out.println("Index is out of bounds. Please enter correct index!");
-                continue;
-            }
-            Player targetPlayer = playerOnTurn.getEnemyPlayers().get(index);
-            targetPlayer.printCards();
-            int cardIndex = targetPlayer.checkCard(targetPlayer.getPlayerCards(),Barrel.class);
-            if (cardIndex != -1) {
-                boolean result = targetPlayer.getBlueCards().get(cardIndex).cardProbabilityOfSuccess(0.25);
-                if (result) {
-                    System.out.println("Barrel worked");
-                    return;
-                } else {
-                    System.out.println("Barrel didnt work");
-                }
-            }
-            cardIndex = targetPlayer.checkCard(targetPlayer.getPlayerCards(),Missed.class);
-            if(cardIndex == -1) {
-                System.out.println(targetPlayer.getName() + " received damage from Bang!");
-                targetPlayer.decreaseHealth(this.getDamage());
-                targetPlayer.checkDeath();
-                if (targetPlayer.getDeath()) {
-                    targetPlayer.playerDied(cardDeck,players);
-                }
-            } else {
-                System.out.println("Missed");
-                targetPlayer.removeCard(cardIndex);
-            }
-            playerOnTurn.getPlayerCards().remove(this);
-            cardDeck.add(this);
-            break;
-        }
+    public boolean canPlay(Player playerOnTurn) {
+        return true;
     }
-    @Override
-    public void blueCardAbility(Player playerOnTurn, List<Card> cardDeck, List<Player> players) {
 
+    public void playCard(Player playerOnTurn, List<Card> cardDeck) {
+        playerOnTurn.printEnemyPlayers();
+        int playerIndex = choosingPlayer(playerOnTurn);
+        Player targetPlayer = playerOnTurn.getEnemyPlayers().get(playerIndex);
+        super.playCard(playerOnTurn,cardDeck);
+        this.cardAbility(targetPlayer);
+    }
+
+    @Override
+    public void cardAbility(Player targetPlayer) {
+        int cardIndex = targetPlayer.checkCard(targetPlayer.getBlueCards(),Barrel.class);
+        if (cardIndex != -1) {
+            if (targetPlayer.getBlueCards().get(cardIndex).blueCardAbility(targetPlayer)) {
+                return;
+            }
+        }
+        cardIndex = targetPlayer.checkCard(targetPlayer.getPlayerCards(),Missed.class);
+        if(cardIndex == -1) {
+            targetPlayer.decreaseHealth(this.getDamage());
+            System.out.println("Player: " + targetPlayer.getName() + " received damage from Bang! Player health dropped to " + targetPlayer.getHealth());
+            targetPlayer.checkDeath();
+            if (targetPlayer.getDeath()) {
+                targetPlayer.playerDied(this.getCardDeck());
+            }
+        } else {
+            targetPlayer.getPlayerCards().get(cardIndex).playCard(targetPlayer,this.getCardDeck());
+        }
     }
     //Methods End
 }

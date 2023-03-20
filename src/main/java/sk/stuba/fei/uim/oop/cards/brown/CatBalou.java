@@ -1,71 +1,111 @@
 package sk.stuba.fei.uim.oop.cards.brown;
 
-import sk.stuba.fei.uim.oop.Player;
+import sk.stuba.fei.uim.oop.player.Player;
 import sk.stuba.fei.uim.oop.cards.Card;
 import sk.stuba.fei.uim.oop.utility.KeyboardInput;
 
 import java.util.List;
 
 public class CatBalou extends Card {
-
     private static final String CARD_NAME = "CatBalou";
+    private static final String CARD_TYPE = "Brown";
+    private List<Card> cardDeck;
 
     //Constructors Start
-    public CatBalou() {
-        super(CARD_NAME);
+    public CatBalou(List<Card> cardDeck) {
+        super(CARD_NAME,CARD_TYPE);
+        this.cardDeck = cardDeck;
     }
     //Constructors End
 
+    //Getters Start
+    public List<Card> getCardDeck() { return this.cardDeck; }
+    //Getters End
+
     //Methods Start
     @Override
-    public void cardAbility(Player playerOnTurn, List<Card> cardDeck,List<Player> pLayers) {
-        playerOnTurn.printEnemyPlayers();
-        while (true) {
-            int index = KeyboardInput.readInt("Enter player index");
-            if (index < 0 || index >= playerOnTurn.getEnemyPlayers().size()) {
-                System.out.println("Index is out of bounds. Please enter correct index!");
-                continue;
+    public boolean canPlay(Player playerOnTurn) {
+        for (int a = 0; a < playerOnTurn.getEnemyPlayers().size(); a++) {
+            Player player = playerOnTurn.getEnemyPlayers().get(a);
+            if (player.getPlayerCards().size() != 0 || player.getBlueCards().size() !=0) {
+                return true;
             }
-            Player targetPlayer = playerOnTurn.getEnemyPlayers().get(index);
-            if (targetPlayer.getPlayerCards().size() == 0 && targetPlayer.getBlueCards().size() == 0) {
-                System.out.println("This player doesnt have any cards.");
-                continue;
-            }
-            while (true) {
-                int brownOrBlue = KeyboardInput.readInt("Enter 0 - cardsInHand, 1 - cardsInFront");
-                if (brownOrBlue !=0 && brownOrBlue !=1) {
-                    System.out.println("Input must be 0 or 1");
-                    continue;
-                }
-                List<Card> playerCards;
-                if (brownOrBlue == 0) {
-                    playerCards = targetPlayer.getPlayerCards();
-                    if (playerCards.size() == 0) {
-                        System.out.println("This player doesnt have cards in hand");
-                        continue;
-                    }
-                } else {
-                    playerCards = targetPlayer.getBlueCards();
-                    if (playerCards.size() == 0) {
-                        System.out.println("This player doesnt have any blue cards on table");
-                        continue;
-                    }
-                }
-                playerOnTurn.getPlayerCards().remove(this);
-                cardDeck.add(this);
-                int cardIndex = this.getRand().nextInt(playerCards.size());
-                Card card = playerCards.get(cardIndex);
-                System.out.println("Removing " + card.getName() + " from " + targetPlayer.getName());
-                cardDeck.add(card);
-                playerCards.remove(card);
+        }
+        //System.out.println("You cannot play CatBalou card! Enemy players don't have any cards! Choose another card!" );
+        return false;
+    }
+    public int chooseCard (Player player) {
+        int cardIndex;
+        while(true) {
+            cardIndex = KeyboardInput.readInt("Enter card index");
+            if (cardIndex < 0 || cardIndex >= player.getBlueCards().size()) {
+                System.out.println("Index is out of range. Please enter correct index!");
+            } else {
                 break;
             }
+        }
+        return cardIndex;
+    }
+    public int choosingPlayer(Player player){
+        int playerIndex;
+        while(true) {
+            playerIndex = super.choosingPlayer(player);
+            Player targetPlayer = player.getEnemyPlayers().get(playerIndex);
+            if (targetPlayer.getPlayerCards().size() == 0 && targetPlayer.getBlueCards().size() == 0) {
+                System.out.println("This player doesnt have any cards. Choose another player!");
+            } else {
+                break;
+            }
+        }
+        return playerIndex;
+    }
+
+    public void playCard(Player playerOnTurn, List<Card> cardDeck) {
+        playerOnTurn.printEnemyPlayers();
+        int playerIndex = choosingPlayer(playerOnTurn);
+        super.playCard(playerOnTurn,cardDeck);
+        Player targetPlayer = playerOnTurn.getEnemyPlayers().get(playerIndex);
+        cardAbility(targetPlayer);
+    }
+
+    @Override
+    public void cardAbility(Player targetPlayer) {
+        while (true) {
+            int brownOrBlue = KeyboardInput.readInt("Enter 0 - playerCardsInHand, 1 - playerBlueCardsOnTable");
+            if (brownOrBlue !=0 && brownOrBlue !=1) {
+                System.out.println("Input must be 0 or 1");
+                continue;
+            }
+            List<Card> playerCards;
+            int cardIndex;
+            Card card;
+            if (brownOrBlue == 0) {
+                playerCards = targetPlayer.getPlayerCards();
+                if (playerCards.size() == 0) {
+                    System.out.println("This player doesnt have cards in hand.");
+                    continue;
+                } else {
+                    cardIndex = this.getRand().nextInt(playerCards.size());
+                    card = playerCards.get(cardIndex);
+                    targetPlayer.getPlayerCards().remove(cardIndex);
+                    this.getCardDeck().add(card);
+                }
+            } else {
+                playerCards = targetPlayer.getBlueCards();
+                if (playerCards.size() == 0) {
+                    System.out.println("This player doesnt have any blue cards on table.");
+                    continue;
+                } else {
+                    targetPlayer.printBlueCards();
+                    cardIndex = chooseCard(targetPlayer);
+                    card = playerCards.get(cardIndex);
+                    targetPlayer.getBlueCards().remove(cardIndex);
+                    this.getCardDeck().add(card);
+                }
+            }
+            System.out.println("Removing " + card.getName() + " from " + targetPlayer.getName());
             break;
         }
-    }
-    @Override
-    public void blueCardAbility(Player playerOnTurn, List<Card> cardDeck, List<Player> players) {
-
     }
     //Methods End
 }

@@ -1,16 +1,17 @@
 package sk.stuba.fei.uim.oop.cards.brown;
 
-import sk.stuba.fei.uim.oop.Player;
+import sk.stuba.fei.uim.oop.player.Player;
 import sk.stuba.fei.uim.oop.cards.Card;
 
 import java.util.List;
 
 public class Beer extends Card {
     private static final String CARD_NAME = "Beer";
+    private static final String CARD_TYPE = "Brown";
     private static final int HEAL_AMOUNT = 1;
     //Constructors Start
     public Beer() {
-        super(CARD_NAME);
+        super(CARD_NAME,CARD_TYPE);
     }
     //Constructors End
 
@@ -19,14 +20,20 @@ public class Beer extends Card {
     //Getters End
 
     //Methods Start
+
     @Override
-    public void cardAbility(Player playerOnTurn, List<Card> cardDeck,List<Player> players) {
-        System.out.println(playerOnTurn.getName() + " drink Beer and heal himself!");
-        playerOnTurn.addHealth(this.getHealAmount());
-        playerOnTurn.getPlayerCards().remove(this);
-        cardDeck.add(this);
+    public boolean canPlay(Player playerOnTurn) {
+        return true;
     }
-    @Override
-    public void blueCardAbility(Player playerOnTurn, List<Card> cardDeck, List<Player> players) {}
+
+    public void playCard(Player playerOnTurn, List<Card> cardDeck) {
+        super.playCard(playerOnTurn,cardDeck);
+        this.cardAbility(playerOnTurn);
+    }
+    public void cardAbility(Player playerOnTurn) {
+        playerOnTurn.addHealth(this.getHealAmount());
+        System.out.println("Player: " + playerOnTurn.getName() +
+                " added health to " + playerOnTurn.getHealth());
+    }
     //Methods End
 }

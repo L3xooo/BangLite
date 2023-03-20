@@ -1,53 +1,64 @@
 package sk.stuba.fei.uim.oop.cards.blue;
-import sk.stuba.fei.uim.oop.Player;
+import sk.stuba.fei.uim.oop.player.Player;
 import sk.stuba.fei.uim.oop.cards.Card;
-import sk.stuba.fei.uim.oop.utility.KeyboardInput;
 
 import java.util.List;
 
 public class Prison extends Card{
-    //Constructors Start
-    private static final String CARD_NAME = "Prison";
 
-    public Prison() {
-        super(CARD_NAME);
+    private static final String CARD_NAME = "Prison";
+    private static final String CARD_TYPE = "Blue";
+    private List<Card> cardDeck;
+
+    //Constructors Start
+    public Prison(List<Card> cardDeck) {
+        super(CARD_NAME,CARD_TYPE);
+        this.cardDeck = cardDeck;
     }
     //Constructors End
 
+    //Getters Start
+    public List<Card> getCardDeck() { return this.cardDeck; }
+    //Getters End
+
     //Methods Start
     @Override
-    public void cardAbility(Player playerOnTurn, List<Card> cardDeck,List<Player> players) {
+    public boolean canPlay(Player playerOnTurn) {
+        for (int a = 0; a < playerOnTurn.getEnemyPlayers().size(); a++){
+            Player player = playerOnTurn.getEnemyPlayers().get(a);
+            if (player.checkCard(player.getBlueCards(),Prison.class) == -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void playCard(Player playerOnTurn, List<Card> cardDeck) {
         playerOnTurn.printEnemyPlayers();
         while(true) {
-            int index = KeyboardInput.readInt("Enter player index or -1 for exit");
-            if (index == -1) {
-                break;
-            }
-            if (index < 0 || index >= playerOnTurn.getEnemyPlayers().size()) {
-                System.out.println("Index out of bounds. Please enter correct index!");
-                continue;
-            }
-            Player targetPlayer = playerOnTurn.getEnemyPlayers().get(index);
-            if (playerOnTurn.checkCard(playerOnTurn.getBlueCards(),Prison.class) != -1) {
-                System.out.println("Player has already barrel in blue cards!");
+            int playerIndex = choosingPlayer(playerOnTurn);
+            Player targetPlayer = playerOnTurn.getEnemyPlayers().get(playerIndex);
+            if (targetPlayer.checkCard(targetPlayer.getBlueCards(),Prison.class) != -1) {
+                System.out.println("Player: " + targetPlayer.getName() + " has already prison in blue cards!");
             } else {
-                playerOnTurn.getPlayerCards().remove(this);
+                super.playCard(playerOnTurn,cardDeck);
+                System.out.println("Player: " + targetPlayer.getName() +" was arrested to the prison!");
                 targetPlayer.getBlueCards().add(this);
                 break;
             }
         }
     }
-    @Override
-    public void blueCardAbility(Player playerOnTurn, List<Card> cardDeck,List<Player> players) {
-        boolean result = this.cardProbabilityOfSuccess(0.25);
-        if (!result) { //neusiel
-            System.out.println(playerOnTurn.getName() + " didnt escaped the prison! You lost you turn!");
-            playerOnTurn.setIsInPrison(true);
-        } else {
-            System.out.println(playerOnTurn.getName() + " escaped the prison!");
-        }
-        cardDeck.add(this);
+
+    public boolean blueCardAbility(Player playerOnTurn) {
+        this.getCardDeck().add(this);
         playerOnTurn.getBlueCards().remove(this);
+        if (this.getRand().nextInt(4) == 0) {
+            System.out.println("Player escaped the prison!");
+            return true;
+        } else {
+            System.out.println("Player didn't escaped the prison! You lost your turn!");
+            return false;
+        }
     }
     //Methods End
 }

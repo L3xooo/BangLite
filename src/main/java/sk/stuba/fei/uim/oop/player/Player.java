@@ -1,22 +1,23 @@
-package sk.stuba.fei.uim.oop;
+package sk.stuba.fei.uim.oop.player;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import sk.stuba.fei.uim.oop.turn.Turn;
 import sk.stuba.fei.uim.oop.cards.Card;
+import sk.stuba.fei.uim.oop.cards.blue.Barrel;
 import sk.stuba.fei.uim.oop.cards.blue.Dynamite;
 import sk.stuba.fei.uim.oop.cards.blue.Prison;
 import sk.stuba.fei.uim.oop.utility.KeyboardInput;
-import sk.stuba.fei.uim.oop.utility.Turn;
 
 
 public class Player {
-    String name;
-    int health;
-    boolean death;
-    List<Card> playerCards;
-    List<Card> blueCards;
-    List <Player> enemyPlayers;
-    boolean isInPrison;
+    private final String name;
+    private int health;
+    private boolean death;
+    private List<Card> playerCards;
+    private List<Card> blueCards;
+    private List <Player> enemyPlayers;
 
     //Constructor Start
     public Player(String name){
@@ -26,12 +27,10 @@ public class Player {
         this.playerCards = new ArrayList<>();
         this.blueCards = new ArrayList<>();
         this.enemyPlayers = new ArrayList<>();
-        this.isInPrison = false;
     }
     //Constructor End
 
     //Getters Start
-    public boolean getIsInPrison() { return this.isInPrison; }
     public String getName() { return this.name; }
     public int getHealth() {
         return this.health;
@@ -57,7 +56,6 @@ public class Player {
     //GameInitialization End
 
     //Methods Start
-    public void setIsInPrison(boolean status) { this.isInPrison = status; }
     public void checkDeath() {
         if (this.getHealth() <= 0) {
             this.death = true;
@@ -80,7 +78,7 @@ public class Player {
             }
         }
     }
-    public int checkCard(List<Card> cards,Class<?> className) {
+    public int checkCard(List<Card> cards,Class className) {
         for (int a = 0; a < cards.size(); a++) {
             if (className.isInstance(cards.get(a))) {
                 return a;
@@ -98,6 +96,7 @@ public class Player {
                     System.out.println("Index out of bounds. Please enter correct index!");
                 } else {
                     Card removedCard = this.getPlayerCards().get(index);
+                    System.out.println("Player: " + this.getName() + " threw away " + removedCard.getName());
                     cardDeck.add(removedCard);
                     this.getPlayerCards().remove(index);
                     break;
@@ -105,27 +104,50 @@ public class Player {
             }
         }
     }
-    public void removeCard(int index) {
-        this.getPlayerCards().remove(index);
-    }
-    public void cardChoose(List<Card> cardDeck,List<Player> players) {
-        if (this.getPlayerCards().size() == 0) {
-            System.out.println("You dont have any cards in hand! End your turn!");
-            return;
-        }
-        while(true) {
-            int index = KeyboardInput.readInt("Enter card index");
-            if (index < 0 || index >= this.getPlayerCards().size()) {
-                System.out.println("Index out ouf bounds. Please enter correct index!");
+
+    public int cardChoose() {
+        this.printCards();
+        int cardIndex;
+        while (true) {
+            cardIndex = KeyboardInput.readInt("Enter card index");
+            if (cardIndex < 0 || cardIndex >=this.getPlayerCards().size()) {
+                System.out.println("Index out of bounds. Please enter correct index!");
             } else {
-                Card card = this.getPlayerCards().get(index);
-                card.cardAbility(this,cardDeck,players);
                 break;
             }
         }
+        return cardIndex;
     }
-    public void playerDied(List<Card> cardDeck, List<Player> players) {
-        System.out.println(this.getName() + " was eliminated from game!");
+
+    public int getPlayableCardsCount() {
+        int count = 0;
+        for (Card card : this.getPlayerCards()) {
+            if(card.canPlay(this)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void playCard(List<Card> cardDeck) {
+        while (true) {
+            int cardIndex = cardChoose();
+            Card card = this.getPlayerCards().get(cardIndex);
+            if (card.canPlay(this)) {
+                card.playCard(this,cardDeck);
+                if (card.getCardType().equals("Brown")) { //vyhod z ruky hraca a daj do balicka
+                    cardDeck.add(card);
+                }   // vyhod z ruky hraca pre oboje
+                this.getPlayerCards().remove(card);
+                break;
+            } else {
+                System.out.println("You cannot play " + card.getName() + " card! Choose another card!");
+            }
+        }
+    }
+
+    public void playerDied(List<Card> cardDeck) {
+        System.out.println("Player: " + this.getName() + " was eliminated from game!");
         cardDeck.addAll(this.getPlayerCards());
         cardDeck.addAll(this.getBlueCards());
         this.getBlueCards().clear();
@@ -134,30 +156,33 @@ public class Player {
             this.getEnemyPlayers().get(a).getEnemyPlayers().remove(this);
         }
         this.getEnemyPlayers().clear();
-        players.remove(this);
     }
-    public boolean checkBlueCards(List<Card> cardDeck, List<Player> players, Turn turn) {
-
-        int prisonIndex = this.checkCard(this.getBlueCards(),Prison.class);
-        int dynamiteIndex = this.checkCard(this.getBlueCards(),Dynamite.class);
-        if (prisonIndex != -1 && dynamiteIndex !=-1) {
+    public boolean checkBlueCards(List<Card> cardDeck, List<Player> players) {
+        int prisonIndex = this.checkCard(this.getBlueCards(), Prison.class);
+        int dynamiteIndex = this.checkCard(this.getBlueCards(), Dynamite.class);
+        if (prisonIndex != -1 || dynamiteIndex != -1) {
+            System.out.println("Checking Player: " + this.getName() + " blue cards!");
+        } else {
+            return false;
+        }
+        if (prisonIndex != -1 && dynamiteIndex != -1) {
             if (prisonIndex < dynamiteIndex) {
-                Collections.swap(this.getBlueCards(),prisonIndex,dynamiteIndex);
+                Collections.swap(this.getBlueCards(), prisonIndex, dynamiteIndex);
             }
         }
+
         for (int a = 0; a < this.getBlueCards().size(); a++) {
             Card card = this.getBlueCards().get(a);
-            card.blueCardAbility(this,cardDeck,players);
-            if (this.getDeath()) {
-                int newIndex = turn.getNextPlayer(players);
-                this.playerDied(cardDeck,players);
-                turn.setPlayerOnTurn(players.get(newIndex));
-                return true;
+            if (card instanceof Barrel) {
+                continue;
             }
-            if (this.getIsInPrison()) {
-                int newIndex = turn.getNextPlayer(players);
-                this.setIsInPrison(false);
-                turn.setPlayerOnTurn(players.get(newIndex));
+            boolean result = card.blueCardAbility(this);
+            if (!result) { //straca tah
+                //int newIndex = turn.getNextPlayer(players);
+                if (this.getDeath()) {
+                    this.playerDied(cardDeck);
+                }
+                //turn.setPlayerOnTurn(players.get(newIndex));
                 return true;
             }
         }
@@ -169,24 +194,30 @@ public class Player {
     public void printEnemyPlayers() {
         for (int a = 0; a < this.getEnemyPlayers().size(); a++) {
             Player player = this.getEnemyPlayers().get(a);
-            System.out.printf("(%d) - %s    Health: %d    Cards: %d    BlueCards: %d",a,
-                    player.getName(), player.getHealth(),
-                    player.getPlayerCards().size(),player.getBlueCards().size());
-            if (player.getBlueCards().size() != 0) {
-                System.out.print(" --- ");
-                for(int b = 0; b < player.getBlueCards().size(); b++) {
-                    System.out.printf("%s ",player.getBlueCards().get(b).getName());
-                }
-            }
-            System.out.println();
+            System.out.printf("(%d) - ",a);
+            player.printPlayerStats();
         }
     }
     public void printPlayerStats() {
-        System.out.printf("Player: %s   Health: %d \n",this.getName(),this.getHealth());
+        System.out.printf("Player: %s    Health: %d    Cards: %d    BlueCards: %d",
+        this.getName(),this.getHealth(),this.getPlayerCards().size(),this.getBlueCards().size());
+        if (this.getBlueCards().size() != 0) {
+            System.out.print(" --- ");
+            for(int b = 0; b < this.getBlueCards().size(); b++) {
+                System.out.printf("%s ",this.getBlueCards().get(b).getName());
+            }
+        }
+        System.out.println();
     }
     public void printCards() {
         for (int a = 0; a < this.getPlayerCards().size(); a++) {
             System.out.printf("(%d)-%s     ",a,this.getPlayerCards().get(a).getName());
+        }
+        System.out.println();
+    }
+    public void printBlueCards() {
+        for (int a = 0; a < this.getBlueCards().size(); a++) {
+            System.out.printf("(%d)-%s     ",a,this.getBlueCards().get(a).getName());
         }
         System.out.println();
     }
