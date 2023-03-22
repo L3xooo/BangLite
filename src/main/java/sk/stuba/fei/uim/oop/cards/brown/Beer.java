@@ -3,8 +3,6 @@ package sk.stuba.fei.uim.oop.cards.brown;
 import sk.stuba.fei.uim.oop.player.Player;
 import sk.stuba.fei.uim.oop.cards.Card;
 
-import java.util.List;
-
 public class Beer extends Card {
     private static final String CARD_NAME = "Beer";
     private static final String CARD_TYPE = "Brown";
@@ -25,9 +23,9 @@ public class Beer extends Card {
     public boolean canPlay(Player playerOnTurn) {
         return true;
     }
-
-    public void playCard(Player playerOnTurn, List<Card> cardDeck) {
-        super.playCard(playerOnTurn,cardDeck);
+    @Override
+    public void playCard(Player playerOnTurn) {
+        super.playCard(playerOnTurn);
         this.cardAbility(playerOnTurn);
     }
     public void cardAbility(Player playerOnTurn) {

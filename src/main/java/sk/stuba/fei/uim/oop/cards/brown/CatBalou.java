@@ -5,21 +5,22 @@ import sk.stuba.fei.uim.oop.cards.Card;
 import sk.stuba.fei.uim.oop.utility.KeyboardInput;
 
 import java.util.List;
+import java.util.Random;
 
 public class CatBalou extends Card {
     private static final String CARD_NAME = "CatBalou";
     private static final String CARD_TYPE = "Brown";
-    private List<Card> cardDeck;
+    private final Random rand;
 
     //Constructors Start
-    public CatBalou(List<Card> cardDeck) {
+    public CatBalou() {
         super(CARD_NAME,CARD_TYPE);
-        this.cardDeck = cardDeck;
+        this.rand = new Random();
     }
     //Constructors End
 
     //Getters Start
-    public List<Card> getCardDeck() { return this.cardDeck; }
+    public Random getRand() { return this.rand; }
     //Getters End
 
     //Methods Start
@@ -46,6 +47,7 @@ public class CatBalou extends Card {
         }
         return cardIndex;
     }
+    @Override
     public int choosingPlayer(Player player){
         int playerIndex;
         while(true) {
@@ -59,11 +61,11 @@ public class CatBalou extends Card {
         }
         return playerIndex;
     }
-
-    public void playCard(Player playerOnTurn, List<Card> cardDeck) {
+    @Override
+    public void playCard(Player playerOnTurn) {
         playerOnTurn.printEnemyPlayers();
         int playerIndex = choosingPlayer(playerOnTurn);
-        super.playCard(playerOnTurn,cardDeck);
+        super.playCard(playerOnTurn);
         Player targetPlayer = playerOnTurn.getEnemyPlayers().get(playerIndex);
         cardAbility(targetPlayer);
     }
@@ -88,7 +90,7 @@ public class CatBalou extends Card {
                     cardIndex = this.getRand().nextInt(playerCards.size());
                     card = playerCards.get(cardIndex);
                     targetPlayer.getPlayerCards().remove(cardIndex);
-                    this.getCardDeck().add(card);
+                    targetPlayer.getDiscardCardDeck().add(card);
                 }
             } else {
                 playerCards = targetPlayer.getBlueCards();
@@ -100,7 +102,7 @@ public class CatBalou extends Card {
                     cardIndex = chooseCard(targetPlayer);
                     card = playerCards.get(cardIndex);
                     targetPlayer.getBlueCards().remove(cardIndex);
-                    this.getCardDeck().add(card);
+                    targetPlayer.getDiscardCardDeck().add(card);
                 }
             }
             System.out.println("Removing " + card.getName() + " from " + targetPlayer.getName());

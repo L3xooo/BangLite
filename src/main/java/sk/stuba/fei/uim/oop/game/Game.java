@@ -12,8 +12,9 @@ import sk.stuba.fei.uim.oop.utility.KeyboardInput;
 import java.util.*;
 
 public class Game {
-    private List<Player> players;
+    private final List<Player> players;
     private List<Card> cardDeck;
+    private List<Card> discardCardDeck;
     private boolean isWin;
     private Player winner;
 
@@ -30,9 +31,17 @@ public class Game {
 
         this.isWin = false;
         this.players = new ArrayList<>();
+        this.cardDeck = new ArrayList<>();
+        this.discardCardDeck = new ArrayList<>();
+        this.winner = null;
+
         int a = 0;
         do {
             String playerName = KeyboardInput.readString("Enter name for Player " + (a+1));
+            if (playerName.isBlank()) {
+                System.out.println("You cannot leave name empty, choose another name!");
+                continue;
+            }
             boolean contain = false;
             for (Player player : this.players) {
                 if (player.getName().equals(playerName)) {
@@ -42,14 +51,12 @@ public class Game {
                 }
             }
             if (!contain) {
-                this.players.add(new Player(playerName));
+                this.players.add(new Player(playerName,this.getDiscardCardDeck()));
                 a++;
             }
         } while (a < numberOfPlayers);
 
         System.out.println();
-        this.cardDeck = new ArrayList<>();
-        this.winner = null;
 
         this.gameInitialization();
 
@@ -58,14 +65,15 @@ public class Game {
     //Constructors End
 
     //Getters Start
-    public List<Player> getPlayers() {
+    private List<Card> getDiscardCardDeck() { return this.discardCardDeck; }
+    private List<Player> getPlayers() {
         return this.players;
     }
-    public List<Card> getCardDeck() {
+    private List<Card> getCardDeck() {
         return this.cardDeck;
     }
-    public boolean getIsWin() { return this.isWin; }
-    public Player getWinner() { return this.winner; }
+    private boolean getIsWin() { return this.isWin; }
+    private Player getWinner() { return this.winner; }
     //Getter End
 
     //Methods Start
@@ -79,12 +87,12 @@ public class Game {
         for(int a = 0; a < 2; a++){
             this.cardDeck.add(new Barrel());
         }
-        this.cardDeck.add(new Dynamite(this.players,this.cardDeck));
+        this.cardDeck.add(new Dynamite(this.players));
         for(int a = 0; a < 3; a++){
-            this.cardDeck.add(new Prison(this.cardDeck));
+            this.cardDeck.add(new Prison());
         }
         for(int a = 0; a < 30; a++){ //30
-            this.cardDeck.add(new Bang(this.cardDeck,this.players));
+            this.cardDeck.add(new Bang());
         }
         for(int a = 0; a < 15; a++){ //15
             this.cardDeck.add(new Missed());
@@ -93,10 +101,10 @@ public class Game {
             this.cardDeck.add(new Beer());
         }
         for(int a = 0; a < 6; a++){
-            this.cardDeck.add(new CatBalou(this.cardDeck));
+            this.cardDeck.add(new CatBalou());
         }
         for(int a = 0; a < 2; a++){
-            this.cardDeck.add(new Indians(this.cardDeck,this.players));
+            this.cardDeck.add(new Indians());
         }
         for(int a = 0; a < 4; a++){
             this.cardDeck.add(new Stagecoach(this.cardDeck));
@@ -111,7 +119,7 @@ public class Game {
         //GameInitialization End
 
     public void startGame(){
-        System.out.print("--- GAME START ---");
+        System.out.println("--- GAME START ---");
         Turn turn = new Turn();
         Iterator<Player> it = this.getPlayers().iterator();
         Player next;
@@ -123,28 +131,35 @@ public class Game {
             if (next.getDeath()) {
                 continue;
             }
-
             turn.setPlayerOnTurn(next);
 
-            this.isWin();
+
+            this.isWin(turn);
             if (this.getIsWin()) {
-                System.out.println("\n\n\n\n\n--- WINNER IS PLAYER: " + this.getWinner() + " ---");
+                System.out.println("\n\n\n\n\n--- WINNER IS PLAYER: " + this.getWinner() + " ---\n\n\n\n\n");
                 break;
             }
-            turn.playerTurn(this.getCardDeck(),this.getPlayers());
+
+            turn.playerTurn(this.getCardDeck());
 
         }
     }
 
     public void initDrawCards(){
-        for (Player player : this.players) {
-            player.drawCard(4, this.cardDeck);
+        for (Player player : this.getPlayers()) {
+            player.drawCard(4, this.getCardDeck());
         }
     }
-    public void isWin() {
-        if (this.getPlayers().size() == 1) {
+    public void isWin(Turn turn) {
+        int count = 0;
+        for (Player player : this.getPlayers()) {
+            if (!player.getDeath()) {
+                 count++;
+            }
+        }
+        if (count == 1) {
             this.isWin = true;
-            this.winner = this.players.get(0);
+            this.winner = turn.getPlayerOnTurn();
         }
     }
     //Methods End

@@ -24,16 +24,11 @@ public class Stagecoach extends Card {
     //Methods Start
     @Override
     public boolean canPlay(Player playerOnTurn) {
-        if (this.getCardDeck().size() < this.getCardCount()) {
-            //System.out.println("You cannot play Stagecoach card! Choose another card!");
-            return false;
-        } else {
-            return true;
-        }
+        return true;
     }
-
-    public void playCard (Player playerOnTurn, List<Card> cardDeck) {
-        super.playCard(playerOnTurn,cardDeck);
+    @Override
+    public void playCard (Player playerOnTurn) {
+        super.playCard(playerOnTurn);
         this.cardAbility(playerOnTurn);
     }
     @Override

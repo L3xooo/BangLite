@@ -2,23 +2,23 @@ package sk.stuba.fei.uim.oop.cards.blue;
 import sk.stuba.fei.uim.oop.player.Player;
 import sk.stuba.fei.uim.oop.cards.Card;
 
-import java.util.List;
+import java.util.Random;
 
 public class Prison extends Card{
 
     private static final String CARD_NAME = "Prison";
     private static final String CARD_TYPE = "Blue";
-    private List<Card> cardDeck;
+    private final Random rand;
 
     //Constructors Start
-    public Prison(List<Card> cardDeck) {
+    public Prison() {
         super(CARD_NAME,CARD_TYPE);
-        this.cardDeck = cardDeck;
+        this.rand = new Random();
     }
     //Constructors End
 
     //Getters Start
-    public List<Card> getCardDeck() { return this.cardDeck; }
+    public Random getRand() { return this.rand; }
     //Getters End
 
     //Methods Start
@@ -32,8 +32,8 @@ public class Prison extends Card{
         }
         return false;
     }
-
-    public void playCard(Player playerOnTurn, List<Card> cardDeck) {
+    @Override
+    public void playCard(Player playerOnTurn) {
         playerOnTurn.printEnemyPlayers();
         while(true) {
             int playerIndex = choosingPlayer(playerOnTurn);
@@ -41,7 +41,7 @@ public class Prison extends Card{
             if (targetPlayer.checkCard(targetPlayer.getBlueCards(),Prison.class) != -1) {
                 System.out.println("Player: " + targetPlayer.getName() + " has already prison in blue cards!");
             } else {
-                super.playCard(playerOnTurn,cardDeck);
+                super.playCard(playerOnTurn);
                 System.out.println("Player: " + targetPlayer.getName() +" was arrested to the prison!");
                 targetPlayer.getBlueCards().add(this);
                 break;
@@ -50,13 +50,13 @@ public class Prison extends Card{
     }
 
     public boolean blueCardAbility(Player playerOnTurn) {
-        this.getCardDeck().add(this);
         playerOnTurn.getBlueCards().remove(this);
+        playerOnTurn.getDiscardCardDeck().add(this);
         if (this.getRand().nextInt(4) == 0) {
-            System.out.println("Player escaped the prison!");
+            System.out.printf("Player: %s escaped the prison!\n",playerOnTurn.getName());
             return true;
         } else {
-            System.out.println("Player didn't escaped the prison! You lost your turn!");
+            System.out.printf("Player: %s didn't escaped the prison! You lost your turn!\n",playerOnTurn.getName());
             return false;
         }
     }

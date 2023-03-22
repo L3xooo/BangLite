@@ -2,19 +2,15 @@ package sk.stuba.fei.uim.oop.cards;
 
 import sk.stuba.fei.uim.oop.player.Player;
 import sk.stuba.fei.uim.oop.utility.KeyboardInput;
-import java.util.List;
-import java.util.Random;
 
 public abstract class Card {
-    private String name;
-    private String cardType;
-    private Random rand;
+    private final String name;
+    private final String cardType;
 
     //Constructor Start
     public Card(String name,String cardType) {
         this.name = name;
         this.cardType = cardType;
-        this.rand = new Random();
     }
     //Constructor End
 
@@ -23,7 +19,6 @@ public abstract class Card {
         return this.name;
     }
     public String getCardType() { return this.cardType; }
-    public Random getRand() { return this.rand; }
     //Getters End
 
     //Methods Start
@@ -40,7 +35,7 @@ public abstract class Card {
         }
         return playerIndex;
     }
-    public void playCard(Player playerOnTurn, List<Card> cardDeck) {
+    public void playCard(Player playerOnTurn) {
         System.out.println("Player: " + playerOnTurn.getName() + " played card " + this.getName());
     }
     public void cardAbility(Player playerOnTurn){}

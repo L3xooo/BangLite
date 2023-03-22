@@ -3,8 +3,6 @@ package sk.stuba.fei.uim.oop.cards.brown;
 import sk.stuba.fei.uim.oop.player.Player;
 import sk.stuba.fei.uim.oop.cards.Card;
 
-import java.util.List;
-
 public class Missed extends Card {
     private static final String CARD_NAME = "Missed";
     private static final String CARD_TYPE = "Brown";
@@ -21,10 +19,11 @@ public class Missed extends Card {
     }
 
     //Methods Start
-    public void playCard(Player playerOnTurn, List<Card> cardDeck) {
+    @Override
+    public void playCard(Player playerOnTurn) {
         cardAbility(playerOnTurn);
+        playerOnTurn.getDiscardCardDeck().add(this);
         playerOnTurn.getPlayerCards().remove(this);
-        cardDeck.add(this);
     }
     @Override
     public void cardAbility(Player playerOnTurn) {

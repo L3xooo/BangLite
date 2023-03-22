@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import sk.stuba.fei.uim.oop.turn.Turn;
 import sk.stuba.fei.uim.oop.cards.Card;
 import sk.stuba.fei.uim.oop.cards.blue.Barrel;
 import sk.stuba.fei.uim.oop.cards.blue.Dynamite;
@@ -17,16 +16,17 @@ public class Player {
     private boolean death;
     private List<Card> playerCards;
     private List<Card> blueCards;
-    private List <Player> enemyPlayers;
-
+    private List<Player> enemyPlayers;
+    private List<Card> discardCardDeck;
     //Constructor Start
-    public Player(String name){
+    public Player(String name,List<Card> discardCardDeck){
         this.death = false;
         this.name = name;
         this.health = 4;
         this.playerCards = new ArrayList<>();
         this.blueCards = new ArrayList<>();
         this.enemyPlayers = new ArrayList<>();
+        this.discardCardDeck = discardCardDeck;
     }
     //Constructor End
 
@@ -39,6 +39,7 @@ public class Player {
     public List<Card> getPlayerCards() { return this.playerCards; }
     public List<Player> getEnemyPlayers() { return this.enemyPlayers; }
     public List<Card> getBlueCards() { return this.blueCards; }
+    public List<Card> getDiscardCardDeck() { return this.discardCardDeck; }
     @Override
     public String toString() {
         return this.name;
@@ -68,14 +69,14 @@ public class Player {
         this.health += healAmount;
     }
     public void drawCard(int numberOfCards,List<Card> cardDeck) {
-        for(int a = 0; a < numberOfCards; a++) {
-            if (cardDeck.isEmpty()) {
-                System.out.println("There are no more cards in deck.");
-                break;
-            } else {
-                this.getPlayerCards().add(cardDeck.get(0));
-                cardDeck.remove(0);
-            }
+        if (cardDeck.size() < numberOfCards) {
+            cardDeck.addAll(this.getDiscardCardDeck());
+            Collections.shuffle(cardDeck);
+            this.getDiscardCardDeck().clear();
+        }
+        for (int a = 0; a < numberOfCards; a++) {
+            this.getPlayerCards().add(cardDeck.get(0));
+            cardDeck.remove(0);
         }
     }
     public int checkCard(List<Card> cards,Class className) {
@@ -86,7 +87,7 @@ public class Player {
         }
         return -1;
     }
-    public void checkCardCount(List<Card> cardDeck) {
+    public void checkCardCount() {
         while (this.getPlayerCards().size() > this.getHealth()) {
             System.out.println("You have more cards than health, throw some card away!");
             this.printCards();
@@ -97,7 +98,7 @@ public class Player {
                 } else {
                     Card removedCard = this.getPlayerCards().get(index);
                     System.out.println("Player: " + this.getName() + " threw away " + removedCard.getName());
-                    cardDeck.add(removedCard);
+                    this.getDiscardCardDeck().add(removedCard);
                     this.getPlayerCards().remove(index);
                     break;
                 }
@@ -106,7 +107,7 @@ public class Player {
     }
 
     public int cardChoose() {
-        this.printCards();
+        //this.printCards();
         int cardIndex;
         while (true) {
             cardIndex = KeyboardInput.readInt("Enter card index");
@@ -129,14 +130,14 @@ public class Player {
         return count;
     }
 
-    public void playCard(List<Card> cardDeck) {
+    public void playCard() {
         while (true) {
             int cardIndex = cardChoose();
             Card card = this.getPlayerCards().get(cardIndex);
             if (card.canPlay(this)) {
-                card.playCard(this,cardDeck);
+                card.playCard(this); //tuto dat carddeck
                 if (card.getCardType().equals("Brown")) { //vyhod z ruky hraca a daj do balicka
-                    cardDeck.add(card);
+                    this.getDiscardCardDeck().add(card);
                 }   // vyhod z ruky hraca pre oboje
                 this.getPlayerCards().remove(card);
                 break;
@@ -146,10 +147,10 @@ public class Player {
         }
     }
 
-    public void playerDied(List<Card> cardDeck) {
+    public void playerDied() {
         System.out.println("Player: " + this.getName() + " was eliminated from game!");
-        cardDeck.addAll(this.getPlayerCards());
-        cardDeck.addAll(this.getBlueCards());
+        this.getDiscardCardDeck().addAll(this.getPlayerCards());
+        this.getDiscardCardDeck().addAll(this.getBlueCards());
         this.getBlueCards().clear();
         this.getPlayerCards().clear();
         for(int a = 0; a < this.getEnemyPlayers().size(); a++) {
@@ -157,7 +158,7 @@ public class Player {
         }
         this.getEnemyPlayers().clear();
     }
-    public boolean checkBlueCards(List<Card> cardDeck, List<Player> players) {
+    public boolean checkBlueCards() {
         int prisonIndex = this.checkCard(this.getBlueCards(), Prison.class);
         int dynamiteIndex = this.checkCard(this.getBlueCards(), Dynamite.class);
         if (prisonIndex != -1 || dynamiteIndex != -1) {
@@ -180,7 +181,7 @@ public class Player {
             if (!result) { //straca tah
                 //int newIndex = turn.getNextPlayer(players);
                 if (this.getDeath()) {
-                    this.playerDied(cardDeck);
+                    this.playerDied();
                 }
                 //turn.setPlayerOnTurn(players.get(newIndex));
                 return true;
@@ -222,7 +223,6 @@ public class Player {
         System.out.println();
     }
     //PrintMethods End
-
 }
 
 
