@@ -18,7 +18,6 @@ public class Game {
     private boolean isWin;
     private Player winner;
 
-    //Constructors Start
     public Game() {
         System.out.println("--- Welcome to game BANG ---");
         int numberOfPlayers;
@@ -62,9 +61,6 @@ public class Game {
 
         this.startGame();
     }
-    //Constructors End
-
-    //Getters Start
     private List<Card> getDiscardCardDeck() { return this.discardCardDeck; }
     private List<Player> getPlayers() {
         return this.players;
@@ -74,10 +70,7 @@ public class Game {
     }
     private boolean getIsWin() { return this.isWin; }
     private Player getWinner() { return this.winner; }
-    //Getter End
 
-    //Methods Start
-        //GameInitialization Start
     public void gameInitialization () {
         this.initPlayerEnemies();
         this.initCards();
@@ -116,7 +109,6 @@ public class Game {
             getPlayers().get(a).addEnemies(this.getPlayers());
         }
     }
-        //GameInitialization End
 
     public void startGame(){
         System.out.println("--- GAME START ---");
@@ -162,5 +154,4 @@ public class Game {
             this.winner = turn.getPlayerOnTurn();
         }
     }
-    //Methods End
 }

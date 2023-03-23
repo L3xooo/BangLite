@@ -7,21 +7,16 @@ public abstract class Card {
     private final String name;
     private final String cardType;
 
-    //Constructor Start
     public Card(String name,String cardType) {
         this.name = name;
         this.cardType = cardType;
     }
-    //Constructor End
 
-    //Getters Start
     public String getName() {
         return this.name;
     }
     public String getCardType() { return this.cardType; }
-    //Getters End
 
-    //Methods Start
     public abstract boolean canPlay(Player playerOnTurn);
     public int choosingPlayer (Player player) {
         int playerIndex;
@@ -42,5 +37,4 @@ public abstract class Card {
     public boolean blueCardAbility(Player playerOnTurn){
         return true;
     }
-    //Methods End
 }

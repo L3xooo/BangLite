@@ -12,18 +12,11 @@ public class CatBalou extends Card {
     private static final String CARD_TYPE = "Brown";
     private final Random rand;
 
-    //Constructors Start
     public CatBalou() {
         super(CARD_NAME,CARD_TYPE);
         this.rand = new Random();
     }
-    //Constructors End
-
-    //Getters Start
     public Random getRand() { return this.rand; }
-    //Getters End
-
-    //Methods Start
     @Override
     public boolean canPlay(Player playerOnTurn) {
         for (int a = 0; a < playerOnTurn.getEnemyPlayers().size(); a++) {
@@ -32,7 +25,6 @@ public class CatBalou extends Card {
                 return true;
             }
         }
-        //System.out.println("You cannot play CatBalou card! Enemy players don't have any cards! Choose another card!" );
         return false;
     }
     public int chooseCard (Player player) {
@@ -109,5 +101,4 @@ public class CatBalou extends Card {
             break;
         }
     }
-    //Methods End
 }

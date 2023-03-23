@@ -10,18 +10,13 @@ public class Prison extends Card{
     private static final String CARD_TYPE = "Blue";
     private final Random rand;
 
-    //Constructors Start
     public Prison() {
         super(CARD_NAME,CARD_TYPE);
         this.rand = new Random();
     }
-    //Constructors End
 
-    //Getters Start
     public Random getRand() { return this.rand; }
-    //Getters End
 
-    //Methods Start
     @Override
     public boolean canPlay(Player playerOnTurn) {
         for (int a = 0; a < playerOnTurn.getEnemyPlayers().size(); a++){
@@ -60,5 +55,4 @@ public class Prison extends Card{
             return false;
         }
     }
-    //Methods End
 }
