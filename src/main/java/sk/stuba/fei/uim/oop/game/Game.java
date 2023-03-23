@@ -18,23 +18,7 @@ public class Game {
     private boolean isWin;
     private Player winner;
 
-    //Constructors Start
-    public Game() {
-        System.out.println("--- Welcome to game BANG ---");
-        int numberOfPlayers;
-        do{
-            numberOfPlayers = KeyboardInput.readInt("Enter number of players (2-4)");
-            if (numberOfPlayers < 2 || numberOfPlayers > 4) {
-                System.out.println("You entered wrong number of players! Please try again!");
-            }
-        } while (numberOfPlayers < 2 || numberOfPlayers > 4);
-
-        this.isWin = false;
-        this.players = new ArrayList<>();
-        this.cardDeck = new ArrayList<>();
-        this.discardCardDeck = new ArrayList<>();
-        this.winner = null;
-
+    public void playerInitialization(int numberOfPlayers) {
         int a = 0;
         do {
             String playerName = KeyboardInput.readString("Enter name for Player " + (a+1));
@@ -55,6 +39,45 @@ public class Game {
                 a++;
             }
         } while (a < numberOfPlayers);
+    }
+
+    public Game() {
+        System.out.println("--- Welcome to game BANG ---");
+        int numberOfPlayers;
+        do{
+            numberOfPlayers = KeyboardInput.readInt("Enter number of players (2-4)");
+            if (numberOfPlayers < 2 || numberOfPlayers > 4) {
+                System.out.println("You entered wrong number of players! Please try again!");
+            }
+        } while (numberOfPlayers < 2 || numberOfPlayers > 4);
+
+        this.isWin = false;
+        this.players = new ArrayList<>();
+        this.cardDeck = new ArrayList<>();
+        this.discardCardDeck = new ArrayList<>();
+        this.winner = null;
+
+        playerInitialization(numberOfPlayers);
+      /*  int a = 0;
+        do {
+            String playerName = KeyboardInput.readString("Enter name for Player " + (a+1));
+            if (playerName.isBlank()) {
+                System.out.println("You cannot leave name empty, choose another name!");
+                continue;
+            }
+            boolean contain = false;
+            for (Player player : this.players) {
+                if (player.getName().equals(playerName)) {
+                    contain = true;
+                    System.out.println("Player name is already taken, choose another name!");
+                    break;
+                }
+            }
+            if (!contain) {
+                this.players.add(new Player(playerName,this.getDiscardCardDeck()));
+                a++;
+            }
+        } while (a < numberOfPlayers);*/
 
         System.out.println();
 
@@ -62,9 +85,7 @@ public class Game {
 
         this.startGame();
     }
-    //Constructors End
 
-    //Getters Start
     private List<Card> getDiscardCardDeck() { return this.discardCardDeck; }
     private List<Player> getPlayers() {
         return this.players;
@@ -74,10 +95,7 @@ public class Game {
     }
     private boolean getIsWin() { return this.isWin; }
     private Player getWinner() { return this.winner; }
-    //Getter End
 
-    //Methods Start
-        //GameInitialization Start
     public void gameInitialization () {
         this.initPlayerEnemies();
         this.initCards();
@@ -116,7 +134,6 @@ public class Game {
             getPlayers().get(a).addEnemies(this.getPlayers());
         }
     }
-        //GameInitialization End
 
     public void startGame(){
         System.out.println("--- GAME START ---");
@@ -162,5 +179,4 @@ public class Game {
             this.winner = turn.getPlayerOnTurn();
         }
     }
-    //Methods End
 }

@@ -10,18 +10,10 @@ public class Bang extends Card {
     private static final String CARD_TYPE = "Brown";
     private static final int DAMAGE = 1;
 
-
-    //Constructors Start
     public Bang() {
         super(CARD_NAME,CARD_TYPE);
     }
-    //Constructors End
-
-    //Getters Start
     public int getDamage() { return DAMAGE; }
-    //Getters End
-
-    //Methods Start
     @Override
     public boolean canPlay(Player playerOnTurn) {
         return true;
@@ -55,5 +47,4 @@ public class Bang extends Card {
             targetPlayer.getPlayerCards().get(cardIndex).playCard(targetPlayer);
         }
     }
-    //Methods End
 }

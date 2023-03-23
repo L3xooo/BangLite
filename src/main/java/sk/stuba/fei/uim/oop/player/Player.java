@@ -18,7 +18,6 @@ public class Player {
     private List<Card> blueCards;
     private List<Player> enemyPlayers;
     private List<Card> discardCardDeck;
-    //Constructor Start
     public Player(String name,List<Card> discardCardDeck){
         this.death = false;
         this.name = name;
@@ -28,9 +27,6 @@ public class Player {
         this.enemyPlayers = new ArrayList<>();
         this.discardCardDeck = discardCardDeck;
     }
-    //Constructor End
-
-    //Getters Start
     public String getName() { return this.name; }
     public int getHealth() {
         return this.health;
@@ -44,9 +40,6 @@ public class Player {
     public String toString() {
         return this.name;
     }
-    //Getters End
-
-    //GameInitialization Start
     public void addEnemies(List<Player> players) {
         for (Player player : players) {
             if (!this.getName().equals(player.getName())) {
@@ -54,9 +47,6 @@ public class Player {
             }
         }
     }
-    //GameInitialization End
-
-    //Methods Start
     public void checkDeath() {
         if (this.getHealth() <= 0) {
             this.death = true;
@@ -107,7 +97,6 @@ public class Player {
     }
 
     public int cardChoose() {
-        //this.printCards();
         int cardIndex;
         while (true) {
             cardIndex = KeyboardInput.readInt("Enter card index");
@@ -135,10 +124,10 @@ public class Player {
             int cardIndex = cardChoose();
             Card card = this.getPlayerCards().get(cardIndex);
             if (card.canPlay(this)) {
-                card.playCard(this); //tuto dat carddeck
-                if (card.getCardType().equals("Brown")) { //vyhod z ruky hraca a daj do balicka
+                card.playCard(this);
+                if (card.getCardType().equals("Brown")) {
                     this.getDiscardCardDeck().add(card);
-                }   // vyhod z ruky hraca pre oboje
+                }
                 this.getPlayerCards().remove(card);
                 break;
             } else {
@@ -178,20 +167,15 @@ public class Player {
                 continue;
             }
             boolean result = card.blueCardAbility(this);
-            if (!result) { //straca tah
-                //int newIndex = turn.getNextPlayer(players);
+            if (!result) {
                 if (this.getDeath()) {
                     this.playerDied();
                 }
-                //turn.setPlayerOnTurn(players.get(newIndex));
                 return true;
             }
         }
         return false;
     }
-    //Methods End
-
-    //PrintMethods Start
     public void printEnemyPlayers() {
         for (int a = 0; a < this.getEnemyPlayers().size(); a++) {
             Player player = this.getEnemyPlayers().get(a);
@@ -222,7 +206,6 @@ public class Player {
         }
         System.out.println();
     }
-    //PrintMethods End
 }
 
 

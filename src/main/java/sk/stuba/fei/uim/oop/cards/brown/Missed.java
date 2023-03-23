@@ -6,19 +6,14 @@ import sk.stuba.fei.uim.oop.cards.Card;
 public class Missed extends Card {
     private static final String CARD_NAME = "Missed";
     private static final String CARD_TYPE = "Brown";
-    //Constructors Start
     public Missed(){
         super(CARD_NAME,CARD_TYPE);
     }
-    //Constructors End
-
-
     @Override
     public boolean canPlay(Player playerOnTurn) {
         return false;
     }
 
-    //Methods Start
     @Override
     public void playCard(Player playerOnTurn) {
         cardAbility(playerOnTurn);
@@ -29,5 +24,4 @@ public class Missed extends Card {
     public void cardAbility(Player playerOnTurn) {
         System.out.println("Player: " + playerOnTurn.getName() + " used Missed and dodged your Bang!");
     }
-    //Methods End
 }

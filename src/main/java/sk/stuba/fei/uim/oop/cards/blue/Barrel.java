@@ -4,23 +4,18 @@ import sk.stuba.fei.uim.oop.cards.Card;
 
 import java.util.Random;
 
-public class Barrel extends Card{
+public class Barrel extends BlueCard{
     private static final String CARD_NAME = "Barrel";
     private static final String CARD_TYPE = "Blue";
-    private final Random rand;
+    //private final Random rand;
 
-    //Constructor Start
     public Barrel() {
         super(CARD_NAME,CARD_TYPE);
-        this.rand = new Random();
+        //this.rand = new Random();
     }
-    //Constructor End
 
-    //Getters Start
-    public Random getRand() { return this.rand; }
-    //Getter End
+    //public Random getRand() { return this.rand; }
 
-    //Methods Start
     @Override
     public boolean canPlay(Player playerOnTurn) {
         return playerOnTurn.checkCard(playerOnTurn.getBlueCards(), Barrel.class) == -1;
@@ -40,5 +35,4 @@ public class Barrel extends Card{
             return false;
         }
     }
-    //Methods End
 }

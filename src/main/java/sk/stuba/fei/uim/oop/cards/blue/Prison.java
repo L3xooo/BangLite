@@ -4,24 +4,19 @@ import sk.stuba.fei.uim.oop.cards.Card;
 
 import java.util.Random;
 
-public class Prison extends Card{
+public class Prison extends BlueCard{
 
     private static final String CARD_NAME = "Prison";
     private static final String CARD_TYPE = "Blue";
-    private final Random rand;
+    //private final Random rand;
 
-    //Constructors Start
     public Prison() {
         super(CARD_NAME,CARD_TYPE);
-        this.rand = new Random();
+        //this.rand = new Random();
     }
-    //Constructors End
-
     //Getters Start
-    public Random getRand() { return this.rand; }
+    //public Random getRand() { return this.rand; }
     //Getters End
-
-    //Methods Start
     @Override
     public boolean canPlay(Player playerOnTurn) {
         for (int a = 0; a < playerOnTurn.getEnemyPlayers().size(); a++){
@@ -60,5 +55,4 @@ public class Prison extends Card{
             return false;
         }
     }
-    //Methods End
 }

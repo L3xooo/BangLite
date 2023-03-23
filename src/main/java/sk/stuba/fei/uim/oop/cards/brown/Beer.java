@@ -7,18 +7,10 @@ public class Beer extends Card {
     private static final String CARD_NAME = "Beer";
     private static final String CARD_TYPE = "Brown";
     private static final int HEAL_AMOUNT = 1;
-    //Constructors Start
     public Beer() {
         super(CARD_NAME,CARD_TYPE);
     }
-    //Constructors End
-
-    //Getters Start
     public int getHealAmount() { return HEAL_AMOUNT; }
-    //Getters End
-
-    //Methods Start
-
     @Override
     public boolean canPlay(Player playerOnTurn) {
         return true;
@@ -33,5 +25,4 @@ public class Beer extends Card {
         System.out.println("Player: " + playerOnTurn.getName() +
                 " added health to " + playerOnTurn.getHealth());
     }
-    //Methods End
 }
