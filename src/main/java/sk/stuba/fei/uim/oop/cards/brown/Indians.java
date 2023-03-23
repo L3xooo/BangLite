@@ -9,11 +9,17 @@ public class Indians extends Card {
     private static final int DAMAGE = 1;
 
 
+    //Constructors Start
     public Indians() {
         super(CARD_NAME,CARD_TYPE);
     }
-    public int getDamage() { return DAMAGE; }
+    //Constructors End
 
+    //Getters Start
+    public int getDamage() { return DAMAGE; }
+    //Getters End
+
+    //Methods Start
     @Override
     public boolean canPlay(Player playerOnTurn) {
         return true;
@@ -44,4 +50,5 @@ public class Indians extends Card {
             }
         }
     }
+    //Methods End
 }

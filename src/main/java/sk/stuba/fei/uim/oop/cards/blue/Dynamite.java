@@ -12,17 +12,21 @@ public class Dynamite extends Card {
     private static final int DAMAGE = 3;
     private final Random rand;
     private final List<Player> players;
-
+    //Constructor Start
     public Dynamite(List<Player> players) {
         super(CARD_NAME,CARD_TYPE);
         this.rand = new Random();
         this.players = players;
     }
+    //Constructor End
 
+    //Getters Start
     public int getDamage() { return DAMAGE; }
     public Random getRand() { return rand; }
     public List<Player> getPlayers() { return this.players; }
+    //Getters End
 
+    //Methods Start
     @Override
     public boolean canPlay(Player playerOnTurn) {
         return playerOnTurn.checkCard(playerOnTurn.getBlueCards(), Dynamite.class) == -1;
@@ -48,6 +52,7 @@ public class Dynamite extends Card {
                     newIndex--;
                 }
             }
+
             System.out.println("Dynamite was added to Player: " + this.getPlayers().get(newIndex).getName() + " blue cards!");
             playerOnTurn.getBlueCards().remove(this);
             this.getPlayers().get(newIndex).getBlueCards().add(this);
@@ -64,4 +69,5 @@ public class Dynamite extends Card {
             return !playerOnTurn.getDeath();
         }
     }
+    //Methods End
 }

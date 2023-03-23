@@ -9,19 +9,23 @@ public class Barrel extends Card{
     private static final String CARD_TYPE = "Blue";
     private final Random rand;
 
+    //Constructor Start
     public Barrel() {
         super(CARD_NAME,CARD_TYPE);
         this.rand = new Random();
     }
+    //Constructor End
 
+    //Getters Start
     public Random getRand() { return this.rand; }
+    //Getter End
 
+    //Methods Start
     @Override
     public boolean canPlay(Player playerOnTurn) {
         return playerOnTurn.checkCard(playerOnTurn.getBlueCards(), Barrel.class) == -1;
     }
 
-    @Override
     public void playCard(Player playerOnTurn) {
         super.playCard(playerOnTurn);
         playerOnTurn.getBlueCards().add(this);
@@ -36,4 +40,5 @@ public class Barrel extends Card{
             return false;
         }
     }
+    //Methods End
 }
