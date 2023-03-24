@@ -1,28 +1,22 @@
-package sk.stuba.fei.uim.oop.cards.blue;
+package sk.stuba.fei.uim.oop.cards;
 
 import sk.stuba.fei.uim.oop.player.Player;
-import sk.stuba.fei.uim.oop.cards.Card;
 
 import java.util.List;
-import java.util.Random;
 
 public class Dynamite extends BlueCard {
     private static final String CARD_NAME = "Dynamite";
-    private static final String CARD_TYPE = "Blue";
     private static final int DAMAGE = 3;
-    //private final Random rand;
     private final List<Player> players;
     public Dynamite(List<Player> players) {
-        super(CARD_NAME,CARD_TYPE);
-        //this.rand = new Random();
+        super(CARD_NAME);
         this.players = players;
     }
     public int getDamage() { return DAMAGE; }
-    //public Random getRand() { return rand; }
     public List<Player> getPlayers() { return this.players; }
     @Override
     public boolean canPlay(Player playerOnTurn) {
-        return playerOnTurn.checkCard(playerOnTurn.getBlueCards(), Dynamite.class) == -1;
+        return playerOnTurn.checkBlueCard(Dynamite.class) == -1;
     }
     @Override
     public void playCard(Player playerOnTurn) {

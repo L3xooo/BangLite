@@ -1,17 +1,14 @@
-package sk.stuba.fei.uim.oop.cards.brown;
+package sk.stuba.fei.uim.oop.cards;
 
 import sk.stuba.fei.uim.oop.player.Player;
-import sk.stuba.fei.uim.oop.cards.Card;
-import sk.stuba.fei.uim.oop.cards.blue.Barrel;
 
 
-public class Bang extends Card {
+public class Bang extends BrownCard {
     private static final String CARD_NAME = "Bang";
-    private static final String CARD_TYPE = "Brown";
     private static final int DAMAGE = 1;
 
     public Bang() {
-        super(CARD_NAME,CARD_TYPE);
+        super(CARD_NAME);
     }
     public int getDamage() { return DAMAGE; }
     @Override
@@ -29,13 +26,13 @@ public class Bang extends Card {
 
     @Override
     public void cardAbility(Player targetPlayer) {
-        int cardIndex = targetPlayer.checkCard(targetPlayer.getBlueCards(),Barrel.class);
+        int cardIndex = targetPlayer.checkBlueCard(Barrel.class);
         if (cardIndex != -1) {
             if (targetPlayer.getBlueCards().get(cardIndex).blueCardAbility(targetPlayer)) {
                 return;
             }
         }
-        cardIndex = targetPlayer.checkCard(targetPlayer.getPlayerCards(),Missed.class);
+        cardIndex = targetPlayer.checkCard(Missed.class);
         if(cardIndex == -1) {
             targetPlayer.decreaseHealth(this.getDamage());
             System.out.println("Player: " + targetPlayer.getName() + " received damage from Bang! Player health dropped to " + targetPlayer.getHealth());

@@ -1,12 +1,11 @@
-package sk.stuba.fei.uim.oop.cards.brown;
+package sk.stuba.fei.uim.oop.cards;
 
-import sk.stuba.fei.uim.oop.cards.Card;
 import sk.stuba.fei.uim.oop.player.Player;
 
 public class BrownCard extends Card {
 
-    public BrownCard(String name, String cardType) {
-        super(name, cardType);
+    public BrownCard(String name) {
+        super(name);
     }
 
     @Override

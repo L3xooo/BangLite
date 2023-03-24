@@ -1,15 +1,14 @@
-package sk.stuba.fei.uim.oop.cards.blue;
+package sk.stuba.fei.uim.oop.cards;
 
-import sk.stuba.fei.uim.oop.cards.Card;
 import sk.stuba.fei.uim.oop.player.Player;
 
 import java.util.Random;
 
-public class BlueCard extends Card {
+public abstract class BlueCard extends Card {
 
     private final Random rand;
-    public BlueCard(String name, String cardType) {
-        super(name, cardType);
+    public BlueCard(String name) {
+        super(name);
         this.rand = new Random();
     }
 
@@ -19,4 +18,6 @@ public class BlueCard extends Card {
     public boolean canPlay(Player playerOnTurn) {
         return false;
     }
+
+    public abstract boolean blueCardAbility(Player playerOnTurn);
 }

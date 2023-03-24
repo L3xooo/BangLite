@@ -1,24 +1,16 @@
-package sk.stuba.fei.uim.oop.cards.blue;
+package sk.stuba.fei.uim.oop.cards;
 import sk.stuba.fei.uim.oop.player.Player;
-import sk.stuba.fei.uim.oop.cards.Card;
-
-import java.util.Random;
 
 public class Barrel extends BlueCard{
     private static final String CARD_NAME = "Barrel";
-    private static final String CARD_TYPE = "Blue";
-    //private final Random rand;
-
     public Barrel() {
-        super(CARD_NAME,CARD_TYPE);
-        //this.rand = new Random();
+        super(CARD_NAME);
     }
 
-    //public Random getRand() { return this.rand; }
 
     @Override
     public boolean canPlay(Player playerOnTurn) {
-        return playerOnTurn.checkCard(playerOnTurn.getBlueCards(), Barrel.class) == -1;
+        return playerOnTurn.checkBlueCard(Barrel.class) == -1;
     }
 
     public void playCard(Player playerOnTurn) {

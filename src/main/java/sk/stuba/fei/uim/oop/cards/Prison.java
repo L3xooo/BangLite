@@ -1,27 +1,19 @@
-package sk.stuba.fei.uim.oop.cards.blue;
+package sk.stuba.fei.uim.oop.cards;
 import sk.stuba.fei.uim.oop.player.Player;
-import sk.stuba.fei.uim.oop.cards.Card;
-
-import java.util.Random;
 
 public class Prison extends BlueCard{
 
     private static final String CARD_NAME = "Prison";
-    private static final String CARD_TYPE = "Blue";
-    //private final Random rand;
 
     public Prison() {
-        super(CARD_NAME,CARD_TYPE);
-        //this.rand = new Random();
+        super(CARD_NAME);
     }
-    //Getters Start
-    //public Random getRand() { return this.rand; }
-    //Getters End
+
     @Override
     public boolean canPlay(Player playerOnTurn) {
         for (int a = 0; a < playerOnTurn.getEnemyPlayers().size(); a++){
             Player player = playerOnTurn.getEnemyPlayers().get(a);
-            if (player.checkCard(player.getBlueCards(),Prison.class) == -1) {
+            if (player.checkBlueCard(Prison.class) == -1) {
                 return true;
             }
         }
@@ -33,7 +25,7 @@ public class Prison extends BlueCard{
         while(true) {
             int playerIndex = choosingPlayer(playerOnTurn);
             Player targetPlayer = playerOnTurn.getEnemyPlayers().get(playerIndex);
-            if (targetPlayer.checkCard(targetPlayer.getBlueCards(),Prison.class) != -1) {
+            if (targetPlayer.checkBlueCard(Prison.class) != -1) {
                 System.out.println("Player: " + targetPlayer.getName() + " has already prison in blue cards!");
             } else {
                 super.playCard(playerOnTurn);

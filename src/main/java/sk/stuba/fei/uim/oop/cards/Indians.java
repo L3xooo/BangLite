@@ -1,16 +1,14 @@
-package sk.stuba.fei.uim.oop.cards.brown;
+package sk.stuba.fei.uim.oop.cards;
 
 import sk.stuba.fei.uim.oop.player.Player;
-import sk.stuba.fei.uim.oop.cards.Card;
 
-public class Indians extends Card {
+public class Indians extends BrownCard {
     private static final String CARD_NAME = "Indians";
-    private static final String CARD_TYPE = "Brown";
     private static final int DAMAGE = 1;
 
 
     public Indians() {
-        super(CARD_NAME,CARD_TYPE);
+        super(CARD_NAME);
     }
     public int getDamage() { return DAMAGE; }
     @Override
@@ -27,7 +25,7 @@ public class Indians extends Card {
         int cardIndex;
         for(int a = 0; a < playerOnTurn.getEnemyPlayers().size(); a++) {
             Player targetPlayer = playerOnTurn.getEnemyPlayers().get(a);
-            cardIndex = targetPlayer.checkCard(targetPlayer.getPlayerCards(),Bang.class);
+            cardIndex = targetPlayer.checkCard(Bang.class);
             if(cardIndex == -1 ) {
                 targetPlayer.decreaseHealth(this.getDamage());
                 System.out.println("Player: " + targetPlayer.getName() +

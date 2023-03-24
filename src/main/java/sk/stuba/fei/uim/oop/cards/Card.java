@@ -5,15 +5,12 @@ import sk.stuba.fei.uim.oop.utility.KeyboardInput;
 
 public abstract class Card {
     private final String name;
-    private final String cardType;
-    public Card(String name,String cardType) {
+    public Card(String name) {
         this.name = name;
-        this.cardType = cardType;
     }
     public String getName() {
         return this.name;
     }
-    public String getCardType() { return this.cardType; }
     public abstract boolean canPlay(Player playerOnTurn);
     public int choosingPlayer (Player player) {
         int playerIndex;
@@ -31,7 +28,8 @@ public abstract class Card {
         System.out.println("Player: " + playerOnTurn.getName() + " played card " + this.getName());
     }
     public void cardAbility(Player playerOnTurn){}
-    public boolean blueCardAbility(Player playerOnTurn){
-        return true;
-    }
+
+    //public boolean blueCardAbility(Player playerOnTurn){
+      //  return true;
+    //}
 }

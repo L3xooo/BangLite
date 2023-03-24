@@ -1,12 +1,8 @@
 package sk.stuba.fei.uim.oop.game;
 
+import sk.stuba.fei.uim.oop.cards.*;
 import sk.stuba.fei.uim.oop.player.Player;
 import sk.stuba.fei.uim.oop.turn.Turn;
-import sk.stuba.fei.uim.oop.cards.Card;
-import sk.stuba.fei.uim.oop.cards.blue.Barrel;
-import sk.stuba.fei.uim.oop.cards.blue.Dynamite;
-import sk.stuba.fei.uim.oop.cards.blue.Prison;
-import sk.stuba.fei.uim.oop.cards.brown.*;
 import sk.stuba.fei.uim.oop.utility.KeyboardInput;
 
 import java.util.*;
@@ -58,26 +54,6 @@ public class Game {
         this.winner = null;
 
         playerInitialization(numberOfPlayers);
-      /*  int a = 0;
-        do {
-            String playerName = KeyboardInput.readString("Enter name for Player " + (a+1));
-            if (playerName.isBlank()) {
-                System.out.println("You cannot leave name empty, choose another name!");
-                continue;
-            }
-            boolean contain = false;
-            for (Player player : this.players) {
-                if (player.getName().equals(playerName)) {
-                    contain = true;
-                    System.out.println("Player name is already taken, choose another name!");
-                    break;
-                }
-            }
-            if (!contain) {
-                this.players.add(new Player(playerName,this.getDiscardCardDeck()));
-                a++;
-            }
-        } while (a < numberOfPlayers);*/
 
         System.out.println();
 

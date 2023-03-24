@@ -1,19 +1,17 @@
-package sk.stuba.fei.uim.oop.cards.brown;
+package sk.stuba.fei.uim.oop.cards;
 
 import sk.stuba.fei.uim.oop.player.Player;
-import sk.stuba.fei.uim.oop.cards.Card;
 import sk.stuba.fei.uim.oop.utility.KeyboardInput;
 
 import java.util.List;
 import java.util.Random;
 
-public class CatBalou extends Card {
+public class CatBalou extends BrownCard {
     private static final String CARD_NAME = "CatBalou";
-    private static final String CARD_TYPE = "Brown";
     private final Random rand;
 
     public CatBalou() {
-        super(CARD_NAME,CARD_TYPE);
+        super(CARD_NAME);
         this.rand = new Random();
     }
     public Random getRand() { return this.rand; }
@@ -70,11 +68,10 @@ public class CatBalou extends Card {
                 System.out.println("Input must be 0 or 1");
                 continue;
             }
-            List<Card> playerCards;
             int cardIndex;
             Card card;
             if (brownOrBlue == 0) {
-                playerCards = targetPlayer.getPlayerCards();
+                List<Card> playerCards = targetPlayer.getPlayerCards();
                 if (playerCards.size() == 0) {
                     System.out.println("This player doesnt have cards in hand.");
                     continue;
@@ -85,7 +82,7 @@ public class CatBalou extends Card {
                     targetPlayer.getDiscardCardDeck().add(card);
                 }
             } else {
-                playerCards = targetPlayer.getBlueCards();
+                List<BlueCard> playerCards = targetPlayer.getBlueCards();
                 if (playerCards.size() == 0) {
                     System.out.println("This player doesnt have any blue cards on table.");
                     continue;

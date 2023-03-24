@@ -1,14 +1,12 @@
-package sk.stuba.fei.uim.oop.cards.brown;
+package sk.stuba.fei.uim.oop.cards;
 
 import sk.stuba.fei.uim.oop.player.Player;
-import sk.stuba.fei.uim.oop.cards.Card;
 
-public class Beer extends Card {
+public class Beer extends BrownCard {
     private static final String CARD_NAME = "Beer";
-    private static final String CARD_TYPE = "Brown";
     private static final int HEAL_AMOUNT = 1;
     public Beer() {
-        super(CARD_NAME,CARD_TYPE);
+        super(CARD_NAME);
     }
     public int getHealAmount() { return HEAL_AMOUNT; }
     @Override

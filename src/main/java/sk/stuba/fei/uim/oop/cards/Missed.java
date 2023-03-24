@@ -1,13 +1,11 @@
-package sk.stuba.fei.uim.oop.cards.brown;
+package sk.stuba.fei.uim.oop.cards;
 
 import sk.stuba.fei.uim.oop.player.Player;
-import sk.stuba.fei.uim.oop.cards.Card;
 
-public class Missed extends Card {
+public class Missed extends BrownCard {
     private static final String CARD_NAME = "Missed";
-    private static final String CARD_TYPE = "Brown";
     public Missed(){
-        super(CARD_NAME,CARD_TYPE);
+        super(CARD_NAME);
     }
     @Override
     public boolean canPlay(Player playerOnTurn) {

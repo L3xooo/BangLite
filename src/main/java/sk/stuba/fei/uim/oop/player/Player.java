@@ -3,10 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import sk.stuba.fei.uim.oop.cards.Card;
-import sk.stuba.fei.uim.oop.cards.blue.Barrel;
-import sk.stuba.fei.uim.oop.cards.blue.Dynamite;
-import sk.stuba.fei.uim.oop.cards.blue.Prison;
+import sk.stuba.fei.uim.oop.cards.*;
 import sk.stuba.fei.uim.oop.utility.KeyboardInput;
 
 
@@ -15,7 +12,7 @@ public class Player {
     private int health;
     private boolean death;
     private List<Card> playerCards;
-    private List<Card> blueCards;
+    private List<BlueCard> blueCards;
     private List<Player> enemyPlayers;
     private List<Card> discardCardDeck;
     public Player(String name,List<Card> discardCardDeck){
@@ -34,7 +31,7 @@ public class Player {
     public boolean getDeath() { return this.death; }
     public List<Card> getPlayerCards() { return this.playerCards; }
     public List<Player> getEnemyPlayers() { return this.enemyPlayers; }
-    public List<Card> getBlueCards() { return this.blueCards; }
+    public List<BlueCard> getBlueCards() { return this.blueCards; }
     public List<Card> getDiscardCardDeck() { return this.discardCardDeck; }
     @Override
     public String toString() {
@@ -59,6 +56,10 @@ public class Player {
         this.health += healAmount;
     }
     public void drawCard(int numberOfCards,List<Card> cardDeck) {
+        if (cardDeck.size() + this.getDiscardCardDeck().size() < numberOfCards) {
+            System.out.println("You cannot draw a card, there are no cards left!");
+            return;
+        }
         if (cardDeck.size() < numberOfCards) {
             cardDeck.addAll(this.getDiscardCardDeck());
             Collections.shuffle(cardDeck);
@@ -69,9 +70,17 @@ public class Player {
             cardDeck.remove(0);
         }
     }
-    public int checkCard(List<Card> cards,Class className) {
-        for (int a = 0; a < cards.size(); a++) {
-            if (className.isInstance(cards.get(a))) {
+    public int checkCard(Class className) {
+        for (int a = 0; a < this.getPlayerCards().size(); a++) {
+            if (className.isInstance(this.getPlayerCards().get(a))) {
+                return a;
+            }
+        }
+        return -1;
+    }
+    public int checkBlueCard(Class className) {
+        for (int a = 0; a < this.getBlueCards().size(); a++) {
+            if (className.isInstance(this.getBlueCards().get(a))) {
                 return a;
             }
         }
@@ -95,7 +104,6 @@ public class Player {
             }
         }
     }
-
     public int cardChoose() {
         int cardIndex;
         while (true) {
@@ -108,7 +116,6 @@ public class Player {
         }
         return cardIndex;
     }
-
     public int getPlayableCardsCount() {
         int count = 0;
         for (Card card : this.getPlayerCards()) {
@@ -118,14 +125,13 @@ public class Player {
         }
         return count;
     }
-
     public void playCard() {
         while (true) {
             int cardIndex = cardChoose();
             Card card = this.getPlayerCards().get(cardIndex);
             if (card.canPlay(this)) {
                 card.playCard(this);
-                if (card.getCardType().equals("Brown")) {
+                if (card instanceof BrownCard) {
                     this.getDiscardCardDeck().add(card);
                 }
                 this.getPlayerCards().remove(card);
@@ -148,8 +154,8 @@ public class Player {
         this.getEnemyPlayers().clear();
     }
     public boolean checkBlueCards() {
-        int prisonIndex = this.checkCard(this.getBlueCards(), Prison.class);
-        int dynamiteIndex = this.checkCard(this.getBlueCards(), Dynamite.class);
+        int prisonIndex = this.checkBlueCard(Prison.class);
+        int dynamiteIndex = this.checkBlueCard(Dynamite.class);
         if (prisonIndex != -1 || dynamiteIndex != -1) {
             System.out.println("Checking Player: " + this.getName() + " blue cards!");
         } else {
@@ -162,7 +168,7 @@ public class Player {
         }
 
         for (int a = 0; a < this.getBlueCards().size(); a++) {
-            Card card = this.getBlueCards().get(a);
+            BlueCard card = this.getBlueCards().get(a);
             if (card instanceof Barrel) {
                 continue;
             }
