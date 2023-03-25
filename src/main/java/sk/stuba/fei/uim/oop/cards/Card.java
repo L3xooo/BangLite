@@ -28,8 +28,4 @@ public abstract class Card {
         System.out.println("Player: " + playerOnTurn.getName() + " played card " + this.getName());
     }
     public void cardAbility(Player playerOnTurn){}
-
-    //public boolean blueCardAbility(Player playerOnTurn){
-      //  return true;
-    //}
 }

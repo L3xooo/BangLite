@@ -25,7 +25,7 @@ public class CatBalou extends BrownCard {
         }
         return false;
     }
-    public int chooseCard (Player player) {
+    private int chooseCard (Player player) {
         int cardIndex;
         while(true) {
             cardIndex = KeyboardInput.readInt("Enter card index");

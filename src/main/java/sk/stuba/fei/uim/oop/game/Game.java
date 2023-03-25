@@ -14,29 +14,6 @@ public class Game {
     private boolean isWin;
     private Player winner;
 
-    public void playerInitialization(int numberOfPlayers) {
-        int a = 0;
-        do {
-            String playerName = KeyboardInput.readString("Enter name for Player " + (a+1));
-            if (playerName.isBlank()) {
-                System.out.println("You cannot leave name empty, choose another name!");
-                continue;
-            }
-            boolean contain = false;
-            for (Player player : this.players) {
-                if (player.getName().equals(playerName)) {
-                    contain = true;
-                    System.out.println("Player name is already taken, choose another name!");
-                    break;
-                }
-            }
-            if (!contain) {
-                this.players.add(new Player(playerName,this.getDiscardCardDeck()));
-                a++;
-            }
-        } while (a < numberOfPlayers);
-    }
-
     public Game() {
         System.out.println("--- Welcome to game BANG ---");
         int numberOfPlayers;
@@ -72,46 +49,69 @@ public class Game {
     private boolean getIsWin() { return this.isWin; }
     private Player getWinner() { return this.winner; }
 
-    public void gameInitialization () {
+    private void gameInitialization () {
         this.initPlayerEnemies();
         this.initCards();
         this.initDrawCards();
     }
-    public void initCards(){
+
+    private void playerInitialization(int numberOfPlayers) {
+        int a = 0;
+        do {
+            String playerName = KeyboardInput.readString("Enter name for Player " + (a+1));
+            if (playerName.isBlank()) {
+                System.out.println("You cannot leave name empty, choose another name!");
+                continue;
+            }
+            boolean contain = false;
+            for (Player player : this.getPlayers()) {
+                if (player.getName().equals(playerName)) {
+                    contain = true;
+                    System.out.println("Player name is already taken, choose another name!");
+                    break;
+                }
+            }
+            if (!contain) {
+                this.getPlayers().add(new Player(playerName,this.getDiscardCardDeck()));
+                a++;
+            }
+        } while (a < numberOfPlayers);
+    }
+    private void initCards(){
         for(int a = 0; a < 2; a++){
-            this.cardDeck.add(new Barrel());
+            this.getCardDeck().add(new Barrel());
         }
-        this.cardDeck.add(new Dynamite(this.players));
+        this.getCardDeck().add(new Dynamite(this.getPlayers()));
         for(int a = 0; a < 3; a++){
-            this.cardDeck.add(new Prison());
+            this.getCardDeck().add(new Prison());
         }
         for(int a = 0; a < 30; a++){ //30
-            this.cardDeck.add(new Bang());
+            this.getCardDeck().add(new Bang());
         }
         for(int a = 0; a < 15; a++){ //15
-            this.cardDeck.add(new Missed());
+            this.getCardDeck().add(new Missed());
         }
         for(int a = 0; a < 8; a++){
-            this.cardDeck.add(new Beer());
+            this.getCardDeck().add(new Beer());
         }
         for(int a = 0; a < 6; a++){
-            this.cardDeck.add(new CatBalou());
+            this.getCardDeck().add(new CatBalou());
         }
         for(int a = 0; a < 2; a++){
-            this.cardDeck.add(new Indians());
+            this.getCardDeck().add(new Indians());
         }
         for(int a = 0; a < 4; a++){
-            this.cardDeck.add(new Stagecoach(this.cardDeck));
+            this.getCardDeck().add(new Stagecoach(this.getCardDeck()));
         }
-        Collections.shuffle(this.cardDeck);
+        Collections.shuffle(this.getCardDeck());
     }
-    public void initPlayerEnemies() {
+    private void initPlayerEnemies() {
         for(int a = 0; a < this.getPlayers().size(); a++) {
-            getPlayers().get(a).addEnemies(this.getPlayers());
+            this.getPlayers().get(a).addEnemies(this.getPlayers());
         }
     }
 
-    public void startGame(){
+    private void startGame(){
         System.out.println("--- GAME START ---");
         Turn turn = new Turn();
         Iterator<Player> it = this.getPlayers().iterator();
@@ -138,7 +138,7 @@ public class Game {
         }
     }
 
-    public void initDrawCards(){
+    private void initDrawCards(){
         for (Player player : this.getPlayers()) {
             player.drawCard(4, this.getCardDeck());
         }

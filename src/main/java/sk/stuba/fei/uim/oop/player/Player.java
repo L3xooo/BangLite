@@ -141,7 +141,6 @@ public class Player {
             }
         }
     }
-
     public void playerDied() {
         System.out.println("Player: " + this.getName() + " was eliminated from game!");
         this.getDiscardCardDeck().addAll(this.getPlayerCards());
