@@ -26,25 +26,6 @@ public class Dynamite extends BlueCard {
     @Override
     public boolean blueCardAbility(Player playerOnTurn) {
         if (this.getRand().nextInt(8) == 0) {
-            System.out.println("Dynamite didn't exploded!");
-            int activeIndex = this.getPlayers().indexOf(playerOnTurn);
-            int newIndex = activeIndex-1;
-            while (true) {
-                if (newIndex < 0) {
-                    newIndex = this.getPlayers().size() - 1;
-                }
-                if (!this.getPlayers().get(newIndex).getDeath()) {
-                    break;
-                } else {
-                    newIndex--;
-                }
-            }
-
-            System.out.println("Dynamite was added to Player: " + this.getPlayers().get(newIndex).getName() + " blue cards!");
-            playerOnTurn.getBlueCards().remove(this);
-            this.getPlayers().get(newIndex).getBlueCards().add(this);
-            return true;
-        } else {
             playerOnTurn.decreaseHealth(this.getDamage());
             System.out.println("Dynamite exploded!");
             System.out.println("Player: " + playerOnTurn.getName() +
@@ -54,6 +35,23 @@ public class Dynamite extends BlueCard {
             playerOnTurn.getBlueCards().remove(this);
             playerOnTurn.checkDeath();
             return !playerOnTurn.getDeath();
+
+        } else {
+
+            System.out.println("Dynamite didn't exploded!");
+            int activeIndex = this.getPlayers().indexOf(playerOnTurn);
+            int newIndex = activeIndex-1;
+            do {
+                if (newIndex < 0) {
+                    newIndex = this.getPlayers().size() - 1;
+                }
+                newIndex--;
+            } while (this.getPlayers().get(newIndex).getDeath());
+
+            System.out.println("Dynamite was added to Player: " + this.getPlayers().get(newIndex).getName() + " blue cards!");
+            playerOnTurn.getBlueCards().remove(this);
+            this.getPlayers().get(newIndex).getBlueCards().add(this);
+            return true;
         }
     }
 }
