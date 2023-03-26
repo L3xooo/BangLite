@@ -40,13 +40,19 @@ public class Dynamite extends BlueCard {
 
             System.out.println("Dynamite didn't exploded!");
             int activeIndex = this.getPlayers().indexOf(playerOnTurn);
+            System.out.println(activeIndex);
             int newIndex = activeIndex-1;
-            do {
+            System.out.println(newIndex);
+            while (true) {
                 if (newIndex < 0) {
                     newIndex = this.getPlayers().size() - 1;
                 }
-                newIndex--;
-            } while (this.getPlayers().get(newIndex).getDeath());
+                if (!this.getPlayers().get(newIndex).getDeath()) {
+                    break;
+                } else {
+                    newIndex--;
+                }
+            }
 
             System.out.println("Dynamite was added to Player: " + this.getPlayers().get(newIndex).getName() + " blue cards!");
             playerOnTurn.getBlueCards().remove(this);
